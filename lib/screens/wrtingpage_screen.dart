@@ -1,24 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:realwriting/style.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class WritingScreen extends StatelessWidget {
+  const WritingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: ColorStyles.mainbackground,
-        child: const Center(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: 'writing',
-                hintText: '오늘의 글을 적어보세요.',
+      backgroundColor: ColorStyles.mainbackground,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 35,
+            ),
+            Transform.translate(
+              offset: const Offset(-160, 0),
+              child: IconButton(
+                onPressed: () {},
+                iconSize: 55,
+                icon: const Icon(Icons.arrow_circle_left_outlined),
               ),
             ),
-          ),
+            Row(
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const SizedBox(
+                  width: 25,
+                ),
+                const Text(
+                  '2023-06-5',
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
+                const SizedBox(
+                  width: 60,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.text_fields_outlined,
+                    size: 45,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.color_lens_outlined,
+                    size: 45,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.image_outlined,
+                    size: 45,
+                  ),
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.all(20.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: '오늘의 글을 적어보세요.',
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
