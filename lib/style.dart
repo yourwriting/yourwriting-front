@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ColorStyles {
-  static const Color mainbackground = Color(0xFFD1D5DE);
-  static const Color mainwhite = Color(0xFFF5F5F5);
+  static const Color mainbackground = Color(0xFFF5F5F5);
+  static const Color mainblack = Color(0xFF272626);
+  static const Color mainshadow = Color(0xFF6F6F6F);
 }
 
 class TextStyles {
