@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:realwriting/screens/home_screen.dart';
 import 'package:realwriting/style.dart';
 
 class GeneratorScreen extends StatelessWidget {
@@ -18,7 +19,12 @@ class GeneratorScreen extends StatelessWidget {
               Transform.translate(
                 offset: const Offset(-150, 0),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                      return const HomeScreen();
+                    }));
+                  },
                   iconSize: 55,
                   icon: const Icon(Icons.arrow_circle_left_outlined),
                 ),

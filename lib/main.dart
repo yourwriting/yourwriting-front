@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:realwriting/screens/generator_screen.dart';
+import 'package:get/get.dart';
+import 'package:realwriting/screens/landingpage_screen.dart';
 
 void main() {
   runApp(const App());
@@ -10,11 +11,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: //WritingScreen(),
-          GeneratorScreen(),
-      //LoadingScreen(),
-      //HomeScreen(),
+    return const GetMaterialApp(
+      home: LandingScreen(),
     );
   }
 }
