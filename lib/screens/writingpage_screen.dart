@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:realwriting/screens/home_screen.dart';
 import 'package:realwriting/style.dart';
+import 'dart:core';
 
 class WritingScreen extends StatelessWidget {
   const WritingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String formattedMonth = now.month.toString().padLeft(2, '0');
+    String formattedDay = now.day.toString().padLeft(2, '0');
+    String formattedDate = "${now.year}-$formattedMonth-$formattedDay";
+
     return Scaffold(
       backgroundColor: ColorStyles.mainbackground,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
         child: Column(
-          children: [
+          children: [  
             const SizedBox(
-              height: 35,
+              height: 30,
             ),
             Transform.translate(
-              offset: const Offset(-160, 0),
+              offset: const Offset(-147, 0),
               child: IconButton(
                 onPressed: () {
                   Navigator.push(context,
@@ -25,45 +31,52 @@ class WritingScreen extends StatelessWidget {
                     return const HomeScreen();
                   }));
                 },
-                iconSize: 55,
+                iconSize: 45,
                 icon: const Icon(Icons.arrow_circle_left_outlined),
               ),
             ),
             Row(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 const SizedBox(
-                  width: 25,
+                  width: 20,
                 ),
-                const Text(
-                  '2023-06-5',
-                  style: TextStyle(
-                    fontSize: 25,
+                Column(
+                  children: [
+                    Text(
+                  formattedDate,
+                  style: const TextStyle(
+                    fontSize: 20,
                   ),
                 ),
+                  const SizedBox(
+                  height: 7,
+                ),
+                  ],
+                ),    
                 const SizedBox(
-                  width: 60,
+                  width: 30,
                 ),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(
                     Icons.text_fields_outlined,
-                    size: 45,
+                    size: 35,
                   ),
                 ),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(
                     Icons.color_lens_outlined,
-                    size: 45,
+                    size: 35,
                   ),
                 ),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(
                     Icons.image_outlined,
-                    size: 45,
+                    size: 35,
                   ),
                 ),
               ],

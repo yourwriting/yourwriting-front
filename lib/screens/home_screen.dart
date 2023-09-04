@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:realwriting/screens/generator_screen.dart';
-import 'package:realwriting/screens/wrtingpage_screen.dart';
+import 'package:realwriting/screens/writingpage_screen.dart';
 import 'package:realwriting/style.dart';
 import 'package:realwriting/widget/book.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'dart:core';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+       DateTime now = DateTime.now();
+    String formattedMonth = now.month.toString().padLeft(2, '0');
+    String formattedDay = now.day.toString().padLeft(2, '0');
+    String formattedDate = "${now.year}-$formattedMonth-$formattedDay";
+
     return MaterialApp(
       home: Scaffold(
         backgroundColor: ColorStyles.mainbackground,
@@ -25,8 +31,11 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    const SizedBox(
+                      width: 4,
+                    ),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute<void>(
@@ -44,8 +53,8 @@ class HomeScreen extends StatelessWidget {
                           fontSize: 14,
                         ),
                         padding: const EdgeInsets.symmetric(
-                          vertical: 11.5,
-                          horizontal: 23.5,
+                          vertical: 8,
+                          horizontal: 21,
                         ),
                       ),
                       child: const Text(
@@ -53,40 +62,37 @@ class HomeScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
                     Transform.translate(
                       offset: const Offset(0, 5),
                       child: IconButton(
                           onPressed: () {},
                           icon: Icon(
                             Icons.remove_circle_outline,
-                            size: 33,
+                            size: 32,
                             color: ColorStyles.mainblack.withOpacity(0.8),
                           )),
                     ),
                     const SizedBox(
-                      width: 50,
+                      width: 25,
                     ),
-                    const Text(
+                    Text(
                       //date,
-                      '2023-05-31',
-                      style: TextStyle(
+                      formattedDate,
+                      style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 20,
+                        fontSize: 19,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
                     const SizedBox(
-                      width: 10,
+                      width: 9,
                     ),
                     const Column(
                       children: [
                         Icon(
                           Icons.settings,
-                          size: 50,
-                          color: ColorStyles.mainblack,
+                          size: 40,
+                          color: ColorStyles.mainblack, 
                         ),
                         SizedBox(
                           height: 15,
@@ -96,7 +102,7 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 13,
+                  height: 23,
                 ),
                 // Container(
                 //   decoration: BoxDecoration(
@@ -116,35 +122,28 @@ class HomeScreen extends StatelessWidget {
                 //     ),
                 //   ),
                 // ),
-
-                const SizedBox(
-                  height: 10,
-                ),
                 Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
+                        horizontal: 21,
                         vertical: 15,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: 135,
-                            height: 163,
+                            width: 131,
+                            height: 168,
+                            //새로운 파일 추가 버튼
                             child: DottedBorder(
                               color: ColorStyles.mainblack.withOpacity(0.6),
                               strokeWidth: 2,
                               dashPattern: const [3, 4],
                               borderType: BorderType.RRect,
                               radius: const Radius.circular(20),
-                              strokeCap: StrokeCap.round,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 63,
-                                  horizontal: 47,
-                                ),
+                              strokeCap: StrokeCap.round,                         
+                              child: Center(
                                 child: IconButton(
                                   onPressed: () {
                                     Navigator.push(context,
@@ -155,7 +154,7 @@ class HomeScreen extends StatelessWidget {
                                   },
                                   icon: const Icon(Icons.add),
                                 ),
-                              ),
+                              )
                             ),
                           ),
                           const writtenBook(Date: '2023-05-22'),
@@ -164,7 +163,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: 32,
+                        horizontal: 21,
                         vertical: 15,
                       ),
                       child: Row(
@@ -177,7 +176,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: 32,
+                        horizontal: 21,
                         vertical: 15,
                       ),
                       child: Row(
