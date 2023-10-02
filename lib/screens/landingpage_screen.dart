@@ -30,7 +30,7 @@ class _LandingScreenState extends State<LandingScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'realWriting',
+                'yourwriting',
                 style: TextStyle(
                   color: ColorStyles.mainblack,
                   fontSize: 35,

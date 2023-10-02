@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:realwriting/style.dart';
 
-class writtenBook extends StatelessWidget {
-  final String Date;
+class WrittenBook extends StatelessWidget {
+  final String date;
 
-  const writtenBook({
+  const WrittenBook({
     super.key,
-    required this.Date,
+    required this.date,
   });
 
   @override
@@ -40,7 +40,7 @@ class writtenBook extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                Date,
+                date,
                 textAlign: TextAlign.center,
               ),
             )));

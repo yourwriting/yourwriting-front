@@ -1,10 +1,36 @@
+
 import 'package:flutter/material.dart';
 import 'package:realwriting/screens/home_screen.dart';
 import 'package:realwriting/style.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'dart:core';
 
-class WritingScreen extends StatelessWidget {
-  const WritingScreen({super.key});
+
+class WritingScreen extends StatefulWidget {
+   const WritingScreen({Key? key}) : super(key: key);
+
+   @override
+   WritingScreenState createState() => WritingScreenState();
+}
+
+class WritingScreenState extends State<WritingScreen> {
+
+  Future<String> fetchContent() async {
+  String urlString = "http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/note/1";
+  Uri uri = Uri.parse(urlString);
+
+  final response = await http.get(uri);
+
+  if (response.statusCode == 200) {
+ var jsonResponse = jsonDecode(response.body);
+    return jsonResponse['result']['content'];
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load content');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -81,15 +107,31 @@ class WritingScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: '오늘의 글을 적어보세요.',
-                  border: InputBorder.none,
+        SingleChildScrollView(
+            child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: FutureBuilder<String> (
+                      future: fetchContent(),
+                      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                        if (snapshot.hasData) {
+                          return TextField(
+                            controller: TextEditingController(text: snapshot.data),
+                            style: const TextStyle(fontFamily: 'UhBee-DongKyung'),
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                              hintText: '오늘의 글을 적어보세요.',
+                              border: InputBorder.none,
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return const Text('Error occurred');
+                        }
+                        // By default, show a loading spinner.
+                        return const CircularProgressIndicator();
+                      },
+                    ),
+                  ),
                 ),
-              ),
-            ),
           ],
         ),
       ),

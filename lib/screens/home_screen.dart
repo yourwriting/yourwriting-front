@@ -11,10 +11,25 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       DateTime now = DateTime.now();
+    DateTime now = DateTime.now();
     String formattedMonth = now.month.toString().padLeft(2, '0');
     String formattedDay = now.day.toString().padLeft(2, '0');
     String formattedDate = "${now.year}-$formattedMonth-$formattedDay";
+
+    const dateData = [
+      {
+        "id": 1,
+        "date": "2023-03-09",
+      },
+      {
+        "id": 2,
+        "date": "2023-06-09",
+      },
+      {
+        "id": 3,
+        "date": "2023-09-09",
+      }
+    ];
 
     return MaterialApp(
       home: Scaffold(
@@ -92,7 +107,7 @@ class HomeScreen extends StatelessWidget {
                         Icon(
                           Icons.settings,
                           size: 40,
-                          color: ColorStyles.mainblack, 
+                          color: ColorStyles.mainblack,
                         ),
                         SizedBox(
                           height: 15,
@@ -137,27 +152,26 @@ class HomeScreen extends StatelessWidget {
                             height: 168,
                             //새로운 파일 추가 버튼
                             child: DottedBorder(
-                              color: ColorStyles.mainblack.withOpacity(0.6),
-                              strokeWidth: 2,
-                              dashPattern: const [3, 4],
-                              borderType: BorderType.RRect,
-                              radius: const Radius.circular(20),
-                              strokeCap: StrokeCap.round,                         
-                              child: Center(
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.push(context,
-                                        MaterialPageRoute<void>(
-                                            builder: (BuildContext context) {
-                                      return const WritingScreen();
-                                    }));
-                                  },
-                                  icon: const Icon(Icons.add),
-                                ),
-                              )
-                            ),
+                                color: ColorStyles.mainblack.withOpacity(0.6),
+                                strokeWidth: 2,
+                                dashPattern: const [3, 4],
+                                borderType: BorderType.RRect,
+                                radius: const Radius.circular(20),
+                                strokeCap: StrokeCap.round,
+                                child: Center(
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute<void>(
+                                              builder: (BuildContext context) {
+                                        return const WritingScreen();
+                                      }));
+                                    },
+                                    icon: const Icon(Icons.add),
+                                  ),
+                                )),
                           ),
-                          const writtenBook(Date: '2023-05-22'),
+                          const WrittenBook(date: '2023-05-22'),
                         ],
                       ),
                     ),
@@ -169,8 +183,8 @@ class HomeScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          writtenBook(Date: '2023-03-31'),
-                          writtenBook(Date: '2022-09-14'),
+                          WrittenBook(date: '2023-03-31'),
+                          WrittenBook(date: '2022-09-14'),
                         ],
                       ),
                     ),
@@ -182,12 +196,47 @@ class HomeScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          writtenBook(Date: '2022-08-31'),
+                          WrittenBook(date: '2022-08-31'),
                         ],
                       ),
                     ),
                   ],
                 )
+              //   Expanded (
+              // child: GridView.builder(
+              //   padding: const EdgeInsets.symmetric(vertical :15), // 패딩을 추가합니다.
+              //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount :2),
+              //   itemCount: dateData.length +1,
+              //   itemBuilder :(BuildContext context,int index){
+              //     if(index ==0 ){
+              //       return SizedBox(
+              //         width :131 ,
+              //         height :168 ,
+              //         child:DottedBorder (
+              //           color :ColorStyles.mainblack.withOpacity(0.6),
+              //           strokeWidth :2 ,
+              //           dashPattern :const [3 ,4] ,
+              //           borderType: BorderType.RRect,
+              //           radius :
+              //               const Radius.circular(20) , strokeCap :
+              //               StrokeCap.round ,child :
+              //               Center(child :
+              //                   IconButton(onPressed :
+              //                       (){
+              //                         Navigator.push(context,
+              //                             MaterialPageRoute<void>(
+              //                                 builder :(BuildContext context){
+              //                           return const WritingScreen();
+              //                         }));
+              //                       } ,icon :
+              //                       const Icon(Icons.add))) 
+              //         )
+              //       );
+              //     }else{
+              //       return WrittenBook(date: dateData[index -1]["date"] as String);
+              //     }
+              //   }),
+              //   ),
               ],
             ),
           ),
