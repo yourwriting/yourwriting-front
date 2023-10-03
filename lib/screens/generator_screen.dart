@@ -30,7 +30,7 @@ class GeneratorScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 60,
+                height: 30,
               ),
               Transform.translate(
                 offset: const Offset(-100, 0),

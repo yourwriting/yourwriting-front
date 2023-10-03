@@ -1,10 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:realwriting/screens/generator_screen.dart';
-import 'package:realwriting/screens/writingpage_screen.dart';
 import 'package:realwriting/style.dart';
-import 'package:realwriting/widget/book.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'dart:core';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+
+import 'package:realwriting/widget/book.dart';
+
+class Note {
+  final int noteId;
+  final String title;
+  // final String content;
+  final String createdAt;
+  final String updatedAt;
+
+  Note({
+    required this.noteId,
+    required this.title,
+    // required this.content,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  // JSON to Note object
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      noteId: json['noteId'],
+      title: json['title'],
+      // content: json['content'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+    );
+  }
+}
+
+Future<List<Note>> fetchNotes() async {
+  final response = await http.get(Uri.parse(
+      'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/home'));
+
+  if (response.statusCode == 200) {
+    List jsonResponse = convert.jsonDecode(response.body)['result'];
+    return jsonResponse.map((item) => Note.fromJson(item)).toList();
+  } else {
+    throw Exception('Failed to load notes');
+  }
+}
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,21 +55,6 @@ class HomeScreen extends StatelessWidget {
     String formattedMonth = now.month.toString().padLeft(2, '0');
     String formattedDay = now.day.toString().padLeft(2, '0');
     String formattedDate = "${now.year}-$formattedMonth-$formattedDay";
-
-    const dateData = [
-      {
-        "id": 1,
-        "date": "2023-03-09",
-      },
-      {
-        "id": 2,
-        "date": "2023-06-09",
-      },
-      {
-        "id": 3,
-        "date": "2023-09-09",
-      }
-    ];
 
     return MaterialApp(
       home: Scaffold(
@@ -139,104 +164,118 @@ class HomeScreen extends StatelessWidget {
                 // ),
                 Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 21,
-                        vertical: 15,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 131,
-                            height: 168,
-                            //새로운 파일 추가 버튼
-                            child: DottedBorder(
-                                color: ColorStyles.mainblack.withOpacity(0.6),
-                                strokeWidth: 2,
-                                dashPattern: const [3, 4],
-                                borderType: BorderType.RRect,
-                                radius: const Radius.circular(20),
-                                strokeCap: StrokeCap.round,
-                                child: Center(
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute<void>(
-                                              builder: (BuildContext context) {
-                                        return const WritingScreen();
-                                      }));
-                                    },
-                                    icon: const Icon(Icons.add),
-                                  ),
-                                )),
-                          ),
-                          const WrittenBook(date: '2023-05-22'),
-                        ],
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 21,
-                        vertical: 15,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          WrittenBook(date: '2023-03-31'),
-                          WrittenBook(date: '2022-09-14'),
-                        ],
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 21,
-                        vertical: 15,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          WrittenBook(date: '2022-08-31'),
-                        ],
-                      ),
-                    ),
+                    //     Padding(
+                    //       padding: const EdgeInsets.symmetric(
+                    //         horizontal: 21,
+                    //         vertical: 15,
+                    //       ),
+                    //       child: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         children: [
+                    //           SizedBox(
+                    //             width: 131,
+                    //             height: 168,
+                    //             //새로운 파일 추가 버튼
+                    //             child: DottedBorder(
+                    //                 color: ColorStyles.mainblack.withOpacity(0.6),
+                    //                 strokeWidth: 2,
+                    //                 dashPattern: const [3, 4],
+                    //                 borderType: BorderType.RRect,
+                    //                 radius: const Radius.circular(20),
+                    //                 strokeCap: StrokeCap.round,
+                    //                 child: Center(
+                    //                   child: IconButton(
+                    //                     onPressed: () {
+                    //                       Navigator.push(context,
+                    //                           MaterialPageRoute<void>(
+                    //                               builder: (BuildContext context) {
+                    //                         return const WritingScreen();
+                    //                       }));
+                    //                     },
+                    //                     icon: const Icon(Icons.add),
+                    //                   ),
+                    //                 )),
+                    //           ),
+                    //           const WrittenBook(date: '2023-05-22'),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //     const Padding(
+                    //       padding: EdgeInsets.symmetric(
+                    //         horizontal: 21,
+                    //         vertical: 15,
+                    //       ),
+                    //       child: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         children: [
+                    //           WrittenBook(date: '2023-03-31'),
+                    //           WrittenBook(date: '2022-09-14'),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //     const Padding(
+                    //       padding: EdgeInsets.symmetric(
+                    //         horizontal: 21,
+                    //         vertical: 15,
+                    //       ),
+                    //       child: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         children: [
+                    //           WrittenBook(date: '2022-08-31'),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ],
+                    // )
+                    // FutureBuilder<List<Note>>(
+                    //   future: fetchNotes(),
+                    //   builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
+                    //     if (snapshot.connectionState == ConnectionState.waiting) {
+                    //       return const CircularProgressIndicator();
+                    //     } else if (snapshot.hasError) {
+                    //       return const Text('Error occurred');
+                    //     } else {
+                    //       return ListView.builder(
+                    //         padding: const EdgeInsets.symmetric(vertical :15),
+                    //         itemCount: snapshot.data!.length +1,
+                    //         itemBuilder :(BuildContext context,int index){
+                    //           if(index ==0 ){
+                    //             // Add button
+                    //             return IconButton(
+                    //               onPressed: () {},
+                    //               icon: const Icon(Icons.add),
+                    //             );
+                    //           }else{
+                    //             return WrittenBook(date: snapshot.data![index -1].createdAt);
+                    //           }
+                    //         });
+                    //     }
+                    //   },
+                    // )
+                    FutureBuilder<List<Note>>(
+                      future: fetchNotes(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Note>> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return const Text('Error occurred');
+                        } else {
+                          // Use a Column widget to display the data
+                          return Column(
+                            children: snapshot.data!
+                                .map((note) => WrittenBook(
+                                      date: note.updatedAt,
+                                      noteId: note.noteId,
+                                    ))
+                                .toList(),
+                          );
+                        }
+                      },
+                    )
                   ],
-                )
-              //   Expanded (
-              // child: GridView.builder(
-              //   padding: const EdgeInsets.symmetric(vertical :15), // 패딩을 추가합니다.
-              //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount :2),
-              //   itemCount: dateData.length +1,
-              //   itemBuilder :(BuildContext context,int index){
-              //     if(index ==0 ){
-              //       return SizedBox(
-              //         width :131 ,
-              //         height :168 ,
-              //         child:DottedBorder (
-              //           color :ColorStyles.mainblack.withOpacity(0.6),
-              //           strokeWidth :2 ,
-              //           dashPattern :const [3 ,4] ,
-              //           borderType: BorderType.RRect,
-              //           radius :
-              //               const Radius.circular(20) , strokeCap :
-              //               StrokeCap.round ,child :
-              //               Center(child :
-              //                   IconButton(onPressed :
-              //                       (){
-              //                         Navigator.push(context,
-              //                             MaterialPageRoute<void>(
-              //                                 builder :(BuildContext context){
-              //                           return const WritingScreen();
-              //                         }));
-              //                       } ,icon :
-              //                       const Icon(Icons.add))) 
-              //         )
-              //       );
-              //     }else{
-              //       return WrittenBook(date: dateData[index -1]["date"] as String);
-              //     }
-              //   }),
-              //   ),
+                ),
               ],
             ),
           ),
