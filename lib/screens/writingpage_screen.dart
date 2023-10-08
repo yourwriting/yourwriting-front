@@ -201,7 +201,7 @@ class WritingScreenState extends State<WritingScreen> {
                           // 텍스트 필드 값이 변경될 때마다 수정된 내용 전송
                         },
                         style: TextStyle(
-                            fontFamily: 'UhBee-DongKyung', fontSize: textSize),
+                            fontFamily: 'your-writing-thin', fontSize: textSize),
                         maxLines: null,
                         decoration: const InputDecoration(
                           hintText: '오늘의 글을 적어보세요.',

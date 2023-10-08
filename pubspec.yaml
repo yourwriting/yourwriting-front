@@ -73,6 +73,12 @@ flutter:
     - family: UhBee-DongKyung
       fonts:
         - asset: assets/fonts/UhBee-DongKyung.ttf
+    - family: your-writing
+      fonts:
+        - asset: assets/fonts/font.ttf
+    - family: your-writing-thin
+      fonts:
+        - asset: assets/fonts/font2.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

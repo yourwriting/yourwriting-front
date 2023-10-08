@@ -3,7 +3,7 @@ import 'package:realwriting/screens/home_screen.dart';
 import 'package:realwriting/style.dart';
 
 class GeneratorScreen extends StatelessWidget {
-  const GeneratorScreen({super.key});
+  const GeneratorScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,104 +13,105 @@ class GeneratorScreen extends StatelessWidget {
         body: Center(
           child: Column(
             children: [
-              const SizedBox(
-                height: 50,
-              ),
-              Transform.translate(
-                offset: const Offset(-150, 0),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute<void>(
-                        builder: (BuildContext context) {
-                      return const HomeScreen();
-                    }));
-                  },
-                  iconSize: 55,
-                  icon: const Icon(Icons.arrow_circle_left_outlined),
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Transform.translate(
-                offset: const Offset(-100, 0),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: ColorStyles.mainblack,
-                    backgroundColor: const Color(0xFFD7E1CA),
-                    shape: const CircleBorder(
-                      eccentricity: 1.0,
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 35,
+              const SizedBox(height: 50),
+              Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                          return const HomeScreen();
+                        }));
+                      },
+                      iconSize: 55,
+                      icon: const Icon(Icons.arrow_circle_left_outlined),
                     ),
                   ),
-                  child: const Text(
-                    'template',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(),
+                  Center(
+                    child:
+                    Column(children: [const SizedBox(height: 200,),
+                     Container(
+                        decoration:
+                            BoxDecoration(color:
+                              Colors.white, borderRadius:
+                                BorderRadius.circular(30)),
+                        child:
+                          const DrawingArea(),
+                      ),
+                    ],)
                   ),
-                ),
+                ],
               ),
-              const SizedBox(
-                height: 13,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 220,
-                    horizontal: 60,
-                  ),
-                  child: Text(
-                    '템플릿을 다운받아 글씨를 적고,\n적은 이미지파일을 업로드 해주세요!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 17,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Transform.translate(
-                offset: const Offset(110, 0),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: ColorStyles.mainblack,
-                    backgroundColor: const Color(0xFFD7E1CA),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal: 35,
-                    ),
-                  ),
-                  child: const Text(
-                    'upload',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(),
-                  ),
-                ),
-              ),
+              const SizedBox(height:
+                15),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+class DrawingArea extends StatefulWidget {
+  const DrawingArea({super.key});
+
+  @override
+  _DrawingAreaState createState() => _DrawingAreaState();
+}
+
+class _DrawingAreaState extends State<DrawingArea> {
+  List<Offset> points = <Offset>[];
+  bool insideBox = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 250,
+      width: 250,
+      child: GestureDetector(
+        onPanDown: (DragDownDetails details) {
+          RenderBox? box = context.findRenderObject() as RenderBox?;
+          Offset point = box!.globalToLocal(details.globalPosition);
+          insideBox = point.dx >0 && point.dy >0 && point.dx <250 && point.dy <250;
+        },
+        onPanUpdate: (DragUpdateDetails details) {
+          setState(() {
+            RenderBox? box = context.findRenderObject() as RenderBox?;
+            Offset point = box!.globalToLocal(details.globalPosition);
+            if (insideBox && point.dx >0 && point.dy >0 && point.dx <250 && point.dy <250){
+              points.add(point);
+            } else {
+              insideBox = false;
+            }
+          });
+        },
+        onPanStart: (DragStartDetails details) {},
+        child: CustomPaint(
+          painter: DrawingPainter(points: points),
+        ),
+      ),
+    );
+  }
+}
+class DrawingPainter extends CustomPainter {
+  DrawingPainter({required this.points});
+
+  final List<Offset> points;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = Colors.black
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 25.0;
+
+    for (int i=0; i<points.length-1; i++) { 
+       canvas.drawLine(points[i], points[i+1], paint);
+     } 
+   }
+
+   @override
+   bool shouldRepaint(DrawingPainter oldDelegate) => true;
 }
