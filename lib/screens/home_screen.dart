@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:realwriting/screens/generator_screen.dart';
+import 'package:realwriting/screens/writingpage_screen.dart';
 import 'package:realwriting/style.dart';
 import 'dart:core';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-
 import 'package:realwriting/widget/book.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 class Note {
   final int noteId;
@@ -34,20 +35,74 @@ class Note {
   }
 }
 
-Future<List<Note>> fetchNotes() async {
-  final response = await http.get(Uri.parse(
-      'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/home'));
+// Future<List<Note>> fetchNotes() async {
+//   final response = await http.get(Uri.parse(
+//       'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/home'));
 
-  if (response.statusCode == 200) {
-    List jsonResponse = convert.jsonDecode(response.body)['result'];
-    return jsonResponse.map((item) => Note.fromJson(item)).toList();
-  } else {
-    throw Exception('Failed to load notes');
-  }
+//   if (response.statusCode == 200) {
+//     List jsonResponse = convert.jsonDecode(response.body)['result'];
+//     return jsonResponse.map((item) => Note.fromJson(item)).toList();
+//   } else {
+//     throw Exception('Failed to load notes');
+//   }
+// }
+
+class HomeScreen extends StatefulWidget {
+  final int? noteId;
+  const HomeScreen({Key? key, this.noteId}) : super(key: key);
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class _HomeScreenState extends State<HomeScreen> {
+  late Future<List<Note>> futureNotes;
+
+  @override
+  void initState() {
+    super.initState();
+    futureNotes = fetchNotes();
+  }
+
+  Future<List<Note>> fetchNotes() async {
+    final response = await http.get(Uri.parse(
+        'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/home'));
+
+    if (response.statusCode == 200) {
+      List jsonResponse = convert.jsonDecode(response.body)['result'];
+      return jsonResponse.map((item) => Note.fromJson(item)).toList();
+    } else {
+      throw Exception('Failed to load notes');
+    }
+  }
+
+  Future<int> createNote() async {
+    String urlString =
+        "http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/note";
+    Uri uri = Uri.parse(urlString);
+
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: convert.jsonEncode(<String, String>{
+        'title': 'New Note', // replace with actual title
+        'content': '', // replace with actual content
+        // add other fields if necessary
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      // Parse the noteId from the response body
+      var jsonResponse = convert.jsonDecode(response.body);
+      int noteId =
+          jsonResponse['result']['noteId']; // Extract noteId from result
+      return noteId;
+    } else {
+      throw Exception('Failed to create a new note');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,78 +124,74 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 60,
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute<void>(
-                            builder: (BuildContext context) {
-                          return const GeneratorScreen();
-                        }));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: ColorStyles.mainblack,
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(13),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                            return const GeneratorScreen();
+                          }));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: ColorStyles.mainblack,
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(13),
+                          ),
+                          textStyle: const TextStyle(
+                            fontSize: 14,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 21,
+                          ),
                         ),
-                        textStyle: const TextStyle(
-                          fontSize: 14,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 21,
+                        child: const Text(
+                          'my font',
+                          textAlign: TextAlign.center,
                         ),
                       ),
-                      child: const Text(
-                        'my font',
-                        textAlign: TextAlign.center,
+                      const SizedBox(
+                        width: 25,
                       ),
-                    ),
-                    Transform.translate(
-                      offset: const Offset(0, 5),
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.remove_circle_outline,
-                            size: 32,
-                            color: ColorStyles.mainblack.withOpacity(0.8),
-                          )),
-                    ),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    Text(
-                      //date,
-                      formattedDate,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 19,
-                        fontWeight: FontWeight.w400,
+                      Column(
+                        children: [
+                          Text(
+                            //date,
+                            formattedDate,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 7,
+                          )
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      width: 9,
-                    ),
-                    const Column(
-                      children: [
-                        Icon(
-                          Icons.settings,
-                          size: 40,
-                          color: ColorStyles.mainblack,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                      ],
-                    ),
-                  ],
+                      const Column(
+                        children: [
+                          Icon(
+                            Icons.settings,
+                            size: 40,
+                            color: ColorStyles.mainblack,
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
+
                 const SizedBox(
                   height: 23,
                 ),
@@ -164,116 +215,62 @@ class HomeScreen extends StatelessWidget {
                 // ),
                 Column(
                   children: [
-                    //     Padding(
-                    //       padding: const EdgeInsets.symmetric(
-                    //         horizontal: 21,
-                    //         vertical: 15,
-                    //       ),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           SizedBox(
-                    //             width: 131,
-                    //             height: 168,
-                    //             //새로운 파일 추가 버튼
-                    //             child: DottedBorder(
-                    //                 color: ColorStyles.mainblack.withOpacity(0.6),
-                    //                 strokeWidth: 2,
-                    //                 dashPattern: const [3, 4],
-                    //                 borderType: BorderType.RRect,
-                    //                 radius: const Radius.circular(20),
-                    //                 strokeCap: StrokeCap.round,
-                    //                 child: Center(
-                    //                   child: IconButton(
-                    //                     onPressed: () {
-                    //                       Navigator.push(context,
-                    //                           MaterialPageRoute<void>(
-                    //                               builder: (BuildContext context) {
-                    //                         return const WritingScreen();
-                    //                       }));
-                    //                     },
-                    //                     icon: const Icon(Icons.add),
-                    //                   ),
-                    //                 )),
-                    //           ),
-                    //           const WrittenBook(date: '2023-05-22'),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //     const Padding(
-                    //       padding: EdgeInsets.symmetric(
-                    //         horizontal: 21,
-                    //         vertical: 15,
-                    //       ),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           WrittenBook(date: '2023-03-31'),
-                    //           WrittenBook(date: '2022-09-14'),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //     const Padding(
-                    //       padding: EdgeInsets.symmetric(
-                    //         horizontal: 21,
-                    //         vertical: 15,
-                    //       ),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           WrittenBook(date: '2022-08-31'),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ],
-                    // )
-                    // FutureBuilder<List<Note>>(
-                    //   future: fetchNotes(),
-                    //   builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
-                    //     if (snapshot.connectionState == ConnectionState.waiting) {
-                    //       return const CircularProgressIndicator();
-                    //     } else if (snapshot.hasError) {
-                    //       return const Text('Error occurred');
-                    //     } else {
-                    //       return ListView.builder(
-                    //         padding: const EdgeInsets.symmetric(vertical :15),
-                    //         itemCount: snapshot.data!.length +1,
-                    //         itemBuilder :(BuildContext context,int index){
-                    //           if(index ==0 ){
-                    //             // Add button
-                    //             return IconButton(
-                    //               onPressed: () {},
-                    //               icon: const Icon(Icons.add),
-                    //             );
-                    //           }else{
-                    //             return WrittenBook(date: snapshot.data![index -1].createdAt);
-                    //           }
-                    //         });
-                    //     }
-                    //   },
-                    // )
+                    SizedBox(
+                      width: 335,
+                      height: 160,
+                      //새로운 파일 추가 버튼
+                      child: DottedBorder(
+                          color: ColorStyles.mainblack.withOpacity(0.6),
+                          strokeWidth: 2,
+                          dashPattern: const [3, 4],
+                          borderType: BorderType.RRect,
+                          radius: const Radius.circular(20),
+                          strokeCap: StrokeCap.round,
+                          child: Center(
+                            child: IconButton(
+                              onPressed: () {
+                                createNote().then((newNoteId) {
+                                  Navigator.push(context,
+                                      MaterialPageRoute<void>(
+                                    builder: (BuildContext context) {
+                                      return WritingScreen(noteId: newNoteId);
+                                    },
+                                  ));
+                                });
+                              },
+                              icon: const Icon(Icons.add),
+                            ),
+                          )),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     FutureBuilder<List<Note>>(
-                      future: fetchNotes(),
+                      future: futureNotes,
                       builder: (BuildContext context,
                           AsyncSnapshot<List<Note>> snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
+                          return const CircularProgressIndicator(); // 데이터 로딩 중일 때 보여줄 UI
                         } else if (snapshot.hasError) {
-                          return const Text('Error occurred');
+                          return const Text('Error occurred'); // 에러 발생 시 보여줄 UI
                         } else {
-                          // Use a Column widget to display the data
+                          // 데이터 로딩이 완료되었을 때 보여줄 UI
                           return Column(
                             children: snapshot.data!
                                 .map((note) => WrittenBook(
-                                      date: note.updatedAt,
-                                      noteId: note.noteId,
-                                    ))
+                                    date: note.updatedAt,
+                                    noteId: note.noteId,
+                                    onDelete: () {
+                                      setState(() {
+                                        futureNotes = fetchNotes();
+                                      });
+                                    }))
                                 .toList(),
                           );
                         }
                       },
-                    )
+                    ),
                   ],
                 ),
               ],

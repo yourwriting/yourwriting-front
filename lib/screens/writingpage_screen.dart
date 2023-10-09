@@ -74,87 +74,21 @@ class WritingScreenState extends State<WritingScreen> {
     return Scaffold(
       backgroundColor: ColorStyles.mainbackground,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 24),
         child: Column(
           children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Transform.translate(
-              offset: const Offset(-147, 0),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute<void>(builder: (BuildContext context) {
-                    return const HomeScreen();
-                  }));
-                },
-                iconSize: 40,
-                icon: const Icon(Icons.arrow_circle_left_outlined),
-              ),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  children: [
-                    Text(
-                      formattedDate,
-                      style: const TextStyle(
-                        fontSize: 19,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                // IconButton(
-                //   onPressed: () {
-                //   },
-                //   icon: const Icon(
-                //     Icons.text_fields_outlined,
-                //     size: 30,
-                //   ),
-                // ),
-                PopupMenuButton<double>(
-                  icon: const Icon(
-                    Icons.text_fields_outlined,
-                    size: 30,
-                  ),
-                  itemBuilder: (BuildContext context) =>
-                      textSizeOptions.map((double value) {
-                    return PopupMenuItem<double>(
-                      value: value,
-                      child: Text(value.toString()),
-                    );
-                  }).toList(),
-                  onSelected: (double newValue) {
-                    setState(() {
-                      textSize = newValue;
-                    });
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                      return const HomeScreen();
+                    }));
                   },
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.color_lens_outlined,
-                    size: 30,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.image_outlined,
-                    size: 30,
-                  ),
+                  iconSize: 31,
+                  icon: const Icon(Icons.arrow_back_ios),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -186,6 +120,71 @@ class WritingScreenState extends State<WritingScreen> {
                 )
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            formattedDate,
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      PopupMenuButton<double>(
+                        icon: const Icon(
+                          Icons.text_fields_outlined,
+                          size: 30,
+                        ),
+                        itemBuilder: (BuildContext context) =>
+                            textSizeOptions.map((double value) {
+                          return PopupMenuItem<double>(
+                            value: value,
+                            child: Text(value.toString()),
+                          );
+                        }).toList(),
+                        onSelected: (double newValue) {
+                          setState(() {
+                            textSize = newValue;
+                          });
+                        },
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.color_lens_outlined,
+                          size: 30,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.image_outlined,
+                          size: 30,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
             SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -201,7 +200,8 @@ class WritingScreenState extends State<WritingScreen> {
                           // 텍스트 필드 값이 변경될 때마다 수정된 내용 전송
                         },
                         style: TextStyle(
-                            fontFamily: 'your-writing-thin', fontSize: textSize),
+                            fontFamily: 'your-writing-thin',
+                            fontSize: textSize),
                         maxLines: null,
                         decoration: const InputDecoration(
                           hintText: '오늘의 글을 적어보세요.',
