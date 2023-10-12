@@ -8,12 +8,14 @@ import 'package:flutter/cupertino.dart';
 class WrittenBook extends StatefulWidget {
   final String date;
   final int noteId;
+  final String title;
   final VoidCallback onDelete;
 
   const WrittenBook({
     Key? key,
     required this.date,
     required this.noteId,
+    required this.title,
     required this.onDelete,
   }) : super(key: key);
 
@@ -54,7 +56,7 @@ class _WrittenBookState extends State<WrittenBook> {
             context: context,
             builder: (BuildContext dialogContext) => CupertinoAlertDialog(
               title: const Text('노트 삭제'),
-              content: Text('${widget.date} 을(를) 정말로 삭제하시겠습니까?'),
+              content: Text('${widget.date} 을(를) 정말 삭제하시겠습니까?'),
               actions: [
                 CupertinoDialogAction(
                   child: const Text('아니오'),
@@ -88,8 +90,10 @@ class _WrittenBookState extends State<WrittenBook> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                WritingScreen(noteId: widget.noteId)));
+                            builder: (context) => WritingScreen(
+                                  noteId: widget.noteId,
+                                  date: widget.date,
+                                )));
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: ColorStyles.mainblack,
@@ -101,10 +105,25 @@ class _WrittenBookState extends State<WrittenBook> {
                         vertical: 75, horizontal: 25),
                   ),
                   child: Center(
-                      child: Text(
-                    widget.date,
-                    textAlign: TextAlign.center,
-                  ))),
+                      child: Column(children: [
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      widget.date,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
+                    )
+                  ]))),
             ),
             const SizedBox(height: 10), // Add SizedBox here
           ],

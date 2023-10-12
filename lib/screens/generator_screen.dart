@@ -4,7 +4,6 @@ import 'package:realwriting/style.dart';
 import 'dart:ui' as ui;
 import 'dart:async';
 import 'dart:typed_data';
-import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
@@ -32,18 +31,16 @@ class GeneratorScreen extends StatelessWidget {
                           return const HomeScreen();
                         }));
                       },
-                      iconSize: 55,
-                      icon: const Icon(Icons.arrow_circle_left_outlined),
+                      iconSize: 31,
+                      icon: const Icon(Icons.arrow_back_ios),
                     ),
                   ),
                   Center(
                       child: Column(
                     children: [
-                      const SizedBox(
-                        height: 200,
-                      ),
+                      const SizedBox(height: 200),
                       RepaintBoundary(
-                        key: _DrawingAreaState.globalKey,
+                        key: UniqueKey(), // 여기에서 UniqueKey 사용
                         child: Container(
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -51,11 +48,10 @@ class GeneratorScreen extends StatelessWidget {
                           child: const DrawingArea(),
                         ),
                       ),
-                      const ElevatedButton(
-                        // 캡쳐 및 업로드 버튼 추가
-                        onPressed: _DrawingAreaState.captureAndUpload,
-                        child: Text('Capture and Upload'),
-                      )
+                      //  ElevatedButton (
+                      //    onPressed:_DrawingAreaState.captureAndUpload,
+                      //    child :Text('Capture and Upload'),
+                      //  )
                     ],
                   )),
                 ],
@@ -77,17 +73,17 @@ class DrawingArea extends StatefulWidget {
 }
 
 class _DrawingAreaState extends State<DrawingArea> {
-  static GlobalKey globalKey = GlobalKey(); // GlobalKey 생성
+  GlobalKey globalKey = GlobalKey(); // GlobalKey 생성
 
-  static Future<void> captureAndUpload() async {
-    // 캡쳐 및 업로드 함수 추가
-    RenderRepaintBoundary boundary =
-        globalKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage();
-    final imageBytes = await getBytesFromCanvas(image);
+  // static Future<void> captureAndUpload() async {
+  //   // 캡쳐 및 업로드 함수 추가
+  //   RenderRepaintBoundary boundary =
+  //       globalKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+  //   ui.Image image = await boundary.toImage();
+  //   final imageBytes = await getBytesFromCanvas(image);
 
-    uploadImage(imageBytes);
-  }
+  //   uploadImage(imageBytes);
+  // }
 
   static Future<Uint8List> getBytesFromCanvas(ui.Image img) async {
     final ByteData? data = await img.toByteData(format: ui.ImageByteFormat.png);
@@ -95,13 +91,13 @@ class _DrawingAreaState extends State<DrawingArea> {
   }
 
   static Future<void> uploadImage(Uint8List imageBytes) async {
-    var url = Uri.parse('localhost:5000/upload');
+    var url = Uri.parse('http://127.0.0.1:5000/upload');
 
     var request = http.MultipartRequest('POST', url);
 
     // 이미지 파일 생성 (임시 파일)
     final tempDir = Directory.systemTemp;
-    final file = await File('${tempDir.path}/image.png').create();
+    final file = await File('${tempDir.path}/1.png').create();
     await file.writeAsBytes(imageBytes);
 
     // MultipartRequest에 이미지 추가
@@ -123,7 +119,8 @@ class _DrawingAreaState extends State<DrawingArea> {
     }
   }
 
-  List<Offset> points = <Offset>[];
+  List<List<Offset>> lines = <List<Offset>>[]; // 여러 개의 선을 저장할 수 있는 리스트 생성
+  List<Offset> currentLine = <Offset>[];
   bool insideBox = false;
 
   @override
@@ -133,10 +130,20 @@ class _DrawingAreaState extends State<DrawingArea> {
       width: 250,
       child: GestureDetector(
         onPanDown: (DragDownDetails details) {
-          RenderBox? box = context.findRenderObject() as RenderBox?;
-          Offset point = box!.globalToLocal(details.globalPosition);
-          insideBox =
-              point.dx > 0 && point.dy > 0 && point.dx < 250 && point.dy < 250;
+          setState(() {
+            currentLine = []; // 현재 그리는 선 초기화
+            lines.add(currentLine); // 새로운 선 추가
+
+            RenderBox? box = context.findRenderObject() as RenderBox?;
+            Offset point = box!.globalToLocal(details.globalPosition);
+            insideBox = point.dx > 0 &&
+                point.dy > 0 &&
+                point.dx < 250 &&
+                point.dy < 250;
+            if (insideBox) {
+              currentLine.add(point); // 터치한 위치에 점 추가
+            }
+          });
         },
         onPanUpdate: (DragUpdateDetails details) {
           setState(() {
@@ -147,7 +154,7 @@ class _DrawingAreaState extends State<DrawingArea> {
                 point.dy > 0 &&
                 point.dx < 250 &&
                 point.dy < 250) {
-              points.add(point);
+              currentLine.add(point); // 현재 그리는 선에 포인트 추가
             } else {
               insideBox = false;
             }
@@ -155,7 +162,7 @@ class _DrawingAreaState extends State<DrawingArea> {
         },
         onPanStart: (DragStartDetails details) {},
         child: CustomPaint(
-          painter: DrawingPainter(points: points),
+          painter: DrawingPainter(lines: lines),
         ),
       ),
     );
@@ -163,9 +170,9 @@ class _DrawingAreaState extends State<DrawingArea> {
 }
 
 class DrawingPainter extends CustomPainter {
-  DrawingPainter({required this.points});
+  DrawingPainter({required this.lines});
 
-  final List<Offset> points;
+  final List<List<Offset>> lines;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -174,11 +181,13 @@ class DrawingPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 25.0;
 
-    for (int i = 0; i < points.length - 1; i++) {
-      canvas.drawLine(points[i], points[i + 1], paint);
+    for (var line in lines) {
+      for (int i = 0; i < line.length - 1; i++) {
+        canvas.drawLine(line[i], line[i + 1], paint);
+      }
     }
   }
 
   @override
-  bool shouldRepaint(DrawingPainter oldDelegate) => true;
+  bool shouldRepaint(DrawingPainter oldDelegate) => oldDelegate.lines != lines;
 }

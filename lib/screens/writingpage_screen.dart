@@ -8,7 +8,8 @@ import 'dart:core';
 
 class WritingScreen extends StatefulWidget {
   final int? noteId;
-  const WritingScreen({Key? key, this.noteId}) : super(key: key);
+  final String? date;
+  const WritingScreen({Key? key, this.noteId, this.date}) : super(key: key);
 
   @override
   WritingScreenState createState() => WritingScreenState();
@@ -16,6 +17,7 @@ class WritingScreen extends StatefulWidget {
 
 class WritingScreenState extends State<WritingScreen> {
   final TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _titleEditingController = TextEditingController();
   double textSize = 16.0;
 
   Future<String> fetchContent() async {
@@ -51,9 +53,28 @@ class WritingScreenState extends State<WritingScreen> {
     }
   }
 
+  Future<String> fetchTitle() async {
+    String urlString =
+        "http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/note/${widget.noteId}";
+    Uri uri = Uri.parse(urlString);
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
+      return jsonResponse['result']['title'];
+    } else {
+      throw Exception('Failed to load title');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+
+    fetchTitle().then((title) {
+      _titleEditingController.text = title;
+    });
 
     // 초기에 서버에서 데이터 가져와 컨트롤러에 설정
     fetchContent().then((content) {
@@ -93,7 +114,8 @@ class WritingScreenState extends State<WritingScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     try {
-                      await updateContent('제목바꿨다', _textEditingController.text);
+                      await updateContent(_titleEditingController.text,
+                          _textEditingController.text);
                       focusNode.unfocus();
                     } catch (e) {
                       // 에러 처리 로직
@@ -134,7 +156,9 @@ class WritingScreenState extends State<WritingScreen> {
                             width: 10,
                           ),
                           Text(
-                            formattedDate,
+                            widget.date != null
+                                ? '${widget.date}'
+                                : formattedDate,
                             style: const TextStyle(
                               fontSize: 18,
                             ),
@@ -193,21 +217,31 @@ class WritingScreenState extends State<WritingScreen> {
                   builder:
                       (BuildContext context, AsyncSnapshot<String> snapshot) {
                     if (snapshot.hasData) {
-                      return TextField(
-                        focusNode: focusNode,
-                        controller: _textEditingController,
-                        onChanged: (value) {
-                          // 텍스트 필드 값이 변경될 때마다 수정된 내용 전송
-                        },
-                        style: TextStyle(
-                            fontFamily: 'your-writing-thin',
-                            fontSize: textSize),
-                        maxLines: null,
-                        decoration: const InputDecoration(
-                          hintText: '오늘의 글을 적어보세요.',
-                          border: InputBorder.none,
+                      return Column(children: [
+                        TextField(
+                          // 제목 입력 필드 추가
+                          controller: _titleEditingController,
+                          style: const TextStyle(
+                              fontFamily: 'your-writing-thin',
+                              fontSize: 25,
+                              fontWeight: FontWeight.w600),
+                          decoration: const InputDecoration(
+                              hintText: '제목을 적어보세요', border: InputBorder.none),
+                          textAlign: TextAlign.center,
                         ),
-                      );
+                        TextField(
+                          focusNode: focusNode,
+                          controller: _textEditingController,
+                          onChanged: (value) {},
+                          style: TextStyle(
+                              fontFamily: 'your-writing-thin',
+                              fontSize: textSize),
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                              hintText: '오늘의 글을 적어보세요.',
+                              border: InputBorder.none),
+                        ),
+                      ]);
                     } else if (snapshot.hasError) {
                       return const Text('Error occurred');
                     }

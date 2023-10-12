@@ -69,7 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
         'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/home'));
 
     if (response.statusCode == 200) {
-      List jsonResponse = convert.jsonDecode(response.body)['result'];
+      List jsonResponse =
+          convert.jsonDecode(convert.utf8.decode(response.bodyBytes))['result'];
       return jsonResponse.map((item) => Note.fromJson(item)).toList();
     } else {
       throw Exception('Failed to load notes');
@@ -87,9 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: convert.jsonEncode(<String, String>{
-        'title': 'New Note', // replace with actual title
-        'content': '', // replace with actual content
-        // add other fields if necessary
+        'title': '',
+        'content': '',
       }),
     );
 
@@ -191,28 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-
                 const SizedBox(
                   height: 23,
                 ),
-                // Container(
-                //   decoration: BoxDecoration(
-                //     color: Colors.white,
-                //     borderRadius: BorderRadius.circular(22),
-                //     // boxShadow: [
-                //     //   BoxShadow(
-                //     //       color: ColorStyles.mainshadow.withOpacity(0.5),
-                //     //       blurRadius: 4,
-                //     //       offset: const Offset(0, 2))
-                //     // ],
-                //   ),
-                //   child: const Padding(
-                //     padding: EdgeInsets.symmetric(
-                //       vertical: 200,
-                //       horizontal: 190,
-                //     ),
-                //   ),
-                // ),
                 Column(
                   children: [
                     SizedBox(
@@ -260,6 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: snapshot.data!
                                 .map((note) => WrittenBook(
                                     date: note.updatedAt,
+                                    title: note.title,
                                     noteId: note.noteId,
                                     onDelete: () {
                                       setState(() {
