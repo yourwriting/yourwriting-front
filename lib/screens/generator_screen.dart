@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:realwriting/screens/home_screen.dart';
+import 'dart:developer' as developer;
 import 'package:realwriting/style.dart';
 import 'dart:ui' as ui;
 import 'dart:async';
@@ -36,24 +37,26 @@ class GeneratorScreen extends StatelessWidget {
                     ),
                   ),
                   Center(
-                      child: Column(
-                    children: [
-                      const SizedBox(height: 200),
-                      RepaintBoundary(
-                        key: UniqueKey(), // 여기에서 UniqueKey 사용
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: const DrawingArea(),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 200),
+                        RepaintBoundary(
+                          key: UniqueKey(), // 여기에서 UniqueKey 사용
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: const DrawingArea(),
+                          ),
                         ),
-                      ),
-                      //  ElevatedButton (
-                      //    onPressed:_DrawingAreaState.captureAndUpload,
-                      //    child :Text('Capture and Upload'),
-                      //  )
-                    ],
-                  )),
+                        const SizedBox(height: 10),
+                        //  ElevatedButton (
+                        //    onPressed:_DrawingAreaState.captureAndUpload,
+                        //    child :Text('Capture and Upload'),
+                        //  )
+                      ],
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 15),
@@ -111,10 +114,10 @@ class _DrawingAreaState extends State<DrawingArea> {
     var response = await request.send();
 
     if (response.statusCode == HttpStatus.ok) {
-      print("Upload successful!");
+      developer.log("Upload successful!");
       await file.delete(); // 임시 파일 삭제
     } else {
-      print("Upload failed with status code ${response.statusCode}.");
+      developer.log("Upload failed with status code ${response.statusCode}.");
       await file.delete(); // 임시 파일 삭제
     }
   }
@@ -128,41 +131,44 @@ class _DrawingAreaState extends State<DrawingArea> {
     return SizedBox(
       height: 250,
       width: 250,
-      child: GestureDetector(
-        onPanDown: (DragDownDetails details) {
-          setState(() {
-            currentLine = []; // 현재 그리는 선 초기화
-            lines.add(currentLine); // 새로운 선 추가
+      child: RepaintBoundary(
+        key: globalKey,
+        child: GestureDetector(
+          onPanDown: (DragDownDetails details) {
+            setState(() {
+              currentLine = []; // 현재 그리는 선 초기화
+              lines.add(currentLine); // 새로운 선 추가
 
-            RenderBox? box = context.findRenderObject() as RenderBox?;
-            Offset point = box!.globalToLocal(details.globalPosition);
-            insideBox = point.dx > 0 &&
-                point.dy > 0 &&
-                point.dx < 250 &&
-                point.dy < 250;
-            if (insideBox) {
-              currentLine.add(point); // 터치한 위치에 점 추가
-            }
-          });
-        },
-        onPanUpdate: (DragUpdateDetails details) {
-          setState(() {
-            RenderBox? box = context.findRenderObject() as RenderBox?;
-            Offset point = box!.globalToLocal(details.globalPosition);
-            if (insideBox &&
-                point.dx > 0 &&
-                point.dy > 0 &&
-                point.dx < 250 &&
-                point.dy < 250) {
-              currentLine.add(point); // 현재 그리는 선에 포인트 추가
-            } else {
-              insideBox = false;
-            }
-          });
-        },
-        onPanStart: (DragStartDetails details) {},
-        child: CustomPaint(
-          painter: DrawingPainter(lines: lines),
+              RenderBox? box = context.findRenderObject() as RenderBox?;
+              Offset point = box!.globalToLocal(details.globalPosition);
+              insideBox = point.dx > 0 &&
+                  point.dy > 0 &&
+                  point.dx < 250 &&
+                  point.dy < 250;
+              if (insideBox) {
+                currentLine.add(point); // 터치한 위치에 점 추가
+              }
+            });
+          },
+          onPanUpdate: (DragUpdateDetails details) {
+            setState(() {
+              RenderBox? box = context.findRenderObject() as RenderBox?;
+              Offset point = box!.globalToLocal(details.globalPosition);
+              if (insideBox &&
+                  point.dx > 0 &&
+                  point.dy > 0 &&
+                  point.dx < 250 &&
+                  point.dy < 250) {
+                currentLine.add(point); // 현재 그리는 선에 포인트 추가
+              } else {
+                insideBox = false;
+              }
+            });
+          },
+          onPanStart: (DragStartDetails details) {},
+          child: CustomPaint(
+            painter: DrawingPainter(lines: lines),
+          ),
         ),
       ),
     );
@@ -189,5 +195,5 @@ class DrawingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(DrawingPainter oldDelegate) => oldDelegate.lines != lines;
+  bool shouldRepaint(DrawingPainter oldDelegate) => true;
 }
