@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:realwriting/screens/home_screen.dart';
-import 'dart:developer' as developer;
 import 'package:realwriting/style.dart';
 import 'dart:ui' as ui;
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
+import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 
@@ -36,26 +36,31 @@ class GeneratorScreen extends StatelessWidget {
                       icon: const Icon(Icons.arrow_back_ios),
                     ),
                   ),
-                  Center(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 200),
-                        RepaintBoundary(
-                          key: UniqueKey(), // 여기에서 UniqueKey 사용
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(30)),
-                            child: const DrawingArea(),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        //  ElevatedButton (
-                        //    onPressed:_DrawingAreaState.captureAndUpload,
-                        //    child :Text('Capture and Upload'),
-                        //  )
-                      ],
-                    ),
+                  const Column(
+                    children: [
+                      SizedBox(height: 200),
+                      Center(
+                        // child: Column(
+                        //   children: [
+                        //     const SizedBox(height: 200),
+                        //     RepaintBoundary(
+                        //       key: UniqueKey(), // 여기에서 UniqueKey 사용
+                        //       child: Container(
+                        //         decoration: BoxDecoration(
+                        //             color: Colors.white,
+                        //             borderRadius: BorderRadius.circular(30)),
+                        child: DrawingArea(),
+                        // ),
+                        // ),
+                        //const SizedBox(height: 10),
+                        // ElevatedButton(
+                        //   onPressed: _DrawingAreaState.captureAndUpload,
+                        //   child: const Text('Capture and Upload'),
+                        // )
+                        //],
+                        // ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -69,7 +74,7 @@ class GeneratorScreen extends StatelessWidget {
 }
 
 class DrawingArea extends StatefulWidget {
-  const DrawingArea({super.key});
+  const DrawingArea({Key? key}) : super(key: key);
 
   @override
   _DrawingAreaState createState() => _DrawingAreaState();
@@ -78,15 +83,15 @@ class DrawingArea extends StatefulWidget {
 class _DrawingAreaState extends State<DrawingArea> {
   GlobalKey globalKey = GlobalKey(); // GlobalKey 생성
 
-  // static Future<void> captureAndUpload() async {
-  //   // 캡쳐 및 업로드 함수 추가
-  //   RenderRepaintBoundary boundary =
-  //       globalKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-  //   ui.Image image = await boundary.toImage();
-  //   final imageBytes = await getBytesFromCanvas(image);
+  Future<void> captureAndUpload() async {
+    // 캡쳐 및 업로드 함수 추가
+    RenderRepaintBoundary boundary =
+        globalKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+    ui.Image image = await boundary.toImage();
+    final imageBytes = await getBytesFromCanvas(image);
 
-  //   uploadImage(imageBytes);
-  // }
+    await uploadImage(imageBytes);
+  }
 
   static Future<Uint8List> getBytesFromCanvas(ui.Image img) async {
     final ByteData? data = await img.toByteData(format: ui.ImageByteFormat.png);
@@ -100,7 +105,7 @@ class _DrawingAreaState extends State<DrawingArea> {
 
     // 이미지 파일 생성 (임시 파일)
     final tempDir = Directory.systemTemp;
-    final file = await File('${tempDir.path}/1.png').create();
+    final file = await File('${tempDir.path}/1.PNG').create();
     await file.writeAsBytes(imageBytes);
 
     // MultipartRequest에 이미지 추가
@@ -114,10 +119,10 @@ class _DrawingAreaState extends State<DrawingArea> {
     var response = await request.send();
 
     if (response.statusCode == HttpStatus.ok) {
-      developer.log("Upload successful!");
+      print("Upload successful!");
       await file.delete(); // 임시 파일 삭제
     } else {
-      developer.log("Upload failed with status code ${response.statusCode}.");
+      print("Upload failed with status code ${response.statusCode}.");
       await file.delete(); // 임시 파일 삭제
     }
   }
@@ -128,49 +133,60 @@ class _DrawingAreaState extends State<DrawingArea> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 250,
-      width: 250,
-      child: RepaintBoundary(
-        key: globalKey,
-        child: GestureDetector(
-          onPanDown: (DragDownDetails details) {
-            setState(() {
-              currentLine = []; // 현재 그리는 선 초기화
-              lines.add(currentLine); // 새로운 선 추가
+    return Column(
+      children: [
+        Container(
+          height: 250,
+          width: 250,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(30)),
+          child: RepaintBoundary(
+            key: globalKey,
+            child: GestureDetector(
+              onPanDown: (DragDownDetails details) {
+                setState(() {
+                  currentLine = []; // 현재 그리는 선 초기화
+                  lines.add(currentLine); // 새로운 선 추가
 
-              RenderBox? box = context.findRenderObject() as RenderBox?;
-              Offset point = box!.globalToLocal(details.globalPosition);
-              insideBox = point.dx > 0 &&
-                  point.dy > 0 &&
-                  point.dx < 250 &&
-                  point.dy < 250;
-              if (insideBox) {
-                currentLine.add(point); // 터치한 위치에 점 추가
-              }
-            });
-          },
-          onPanUpdate: (DragUpdateDetails details) {
-            setState(() {
-              RenderBox? box = context.findRenderObject() as RenderBox?;
-              Offset point = box!.globalToLocal(details.globalPosition);
-              if (insideBox &&
-                  point.dx > 0 &&
-                  point.dy > 0 &&
-                  point.dx < 250 &&
-                  point.dy < 250) {
-                currentLine.add(point); // 현재 그리는 선에 포인트 추가
-              } else {
-                insideBox = false;
-              }
-            });
-          },
-          onPanStart: (DragStartDetails details) {},
-          child: CustomPaint(
-            painter: DrawingPainter(lines: lines),
+                  RenderBox? box = context.findRenderObject() as RenderBox?;
+                  Offset point = box!.globalToLocal(details.globalPosition);
+                  insideBox = point.dx > 0 &&
+                      point.dy > 0 &&
+                      point.dx < 250 &&
+                      point.dy < 250;
+                  if (insideBox) {
+                    currentLine.add(point); // 터치한 위치에 점 추가
+                  }
+                });
+              },
+              onPanUpdate: (DragUpdateDetails details) {
+                setState(() {
+                  RenderBox? box = context.findRenderObject() as RenderBox?;
+                  Offset point = box!.globalToLocal(details.globalPosition);
+                  if (insideBox &&
+                      point.dx > 0 &&
+                      point.dy > 0 &&
+                      point.dx < 250 &&
+                      point.dy < 250) {
+                    currentLine.add(point); // 현재 그리는 선에 포인트 추가
+                  } else {
+                    insideBox = false;
+                  }
+                });
+              },
+              onPanStart: (DragStartDetails details) {},
+              child: CustomPaint(
+                painter: DrawingPainter(lines: lines),
+              ),
+            ),
           ),
         ),
-      ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: captureAndUpload,
+          child: const Text('Capture and Upload'),
+        )
+      ],
     );
   }
 }
