@@ -49,7 +49,8 @@ class GeneratorScreen extends StatelessWidget {
                         //         decoration: BoxDecoration(
                         //             color: Colors.white,
                         //             borderRadius: BorderRadius.circular(30)),
-                        child: DrawingArea(),
+                        child: DrawingSession(),
+                        //child: DrawingArea(),
                         // ),
                         // ),
                         //const SizedBox(height: 10),
@@ -73,24 +74,139 @@ class GeneratorScreen extends StatelessWidget {
   }
 }
 
+class DrawingSession extends StatefulWidget {
+  const DrawingSession({Key? key}) : super(key: key);
+
+  @override
+  _DrawingSessionState createState() => _DrawingSessionState();
+}
+
+class _DrawingSessionState extends State<DrawingSession> {
+  List<Uint8List> images = []; // 각각의 그림에 대한 이미지 데이터를 저장할 리스트
+  int currentStep = 0; // 현재 그리고 있는 글자의 인덱스
+  final GlobalKey<_DrawingAreaState> _drawingAreaKey = GlobalKey();
+
+  Future<void> captureImage(Uint8List imageBytes) async {
+    // 이미지 파일 생성 (임시 파일)
+    final tempDir = Directory.systemTemp;
+    final file = await File('${tempDir.path}/${currentStep + 1}.PNG').create();
+
+    // 여기서 currentStep은 현재 그리고 있는 글자의 인덱스입니다.
+
+    await file.writeAsBytes(imageBytes);
+  }
+
+  // void captureImage(Uint8List imageBytes) async {
+  //   // 이미지 파일 생성 (임시 파일)
+  //   final tempDir = Directory.systemTemp;
+  //   final file = await File('${tempDir.path}/${currentStep + 1}.PNG').create();
+
+  //   await file.writeAsBytes(imageBytes);
+  // }
+
+  Future<void> uploadImages() async {
+    var url = Uri.parse('http://127.0.0.1:5000/upload');
+    var request = http.MultipartRequest('POST', url);
+
+    for (int i = 1; i <= 40; i++) {
+      final tempDir = Directory.systemTemp;
+      final file = File('${tempDir.path}/$i.PNG');
+
+      if (await file.exists()) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'files',
+          file.path,
+          contentType: MediaType('image', 'png'),
+        ));
+      }
+    }
+
+    var response = await request.send();
+
+    if (response.statusCode == HttpStatus.ok) {
+      print("Upload successful!");
+      for (int i = 1; i <= 40; i++) {
+        // 임시 파일 삭제
+        final tempDir = Directory.systemTemp;
+        final file = File('${tempDir.path}/$i.PNG');
+        if (await file.exists()) {
+          await file.delete();
+        }
+      }
+    } else {
+      print("Upload failed with status code ${response.statusCode}.");
+      // 실패한 경우에도 임시 파일 삭제
+      for (int i = 1; i <= 40; i++) {
+        final tempDir = Directory.systemTemp;
+        final file = File('${tempDir.path}/$i.PNG');
+        if (await file.exists()) {
+          await file.delete();
+        }
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (images.isNotEmpty) Image.memory(images.last), // 마지막으로 그린 이미지 표시
+        DrawingArea(
+          key: _drawingAreaKey,
+          onCapture: (imageBytes) async {
+            await captureImage(imageBytes);
+            if (currentStep < 39) {
+              setState(() {
+                currentStep++;
+              });
+            }
+          },
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            final drawingAreaState =
+                _drawingAreaKey.currentState as _DrawingAreaState;
+            await drawingAreaState.captureAndSave();
+            drawingAreaState.clearDrawing();
+          },
+          child: const Text('Next'),
+        ),
+        ElevatedButton(
+          onPressed: uploadImages,
+          child: const Text('Upload All'),
+        ),
+      ],
+    );
+  }
+}
+
 class DrawingArea extends StatefulWidget {
-  const DrawingArea({Key? key}) : super(key: key);
+  final Function(Uint8List) onCapture;
+
+  const DrawingArea({Key? key, required this.onCapture}) : super(key: key);
 
   @override
   _DrawingAreaState createState() => _DrawingAreaState();
 }
 
 class _DrawingAreaState extends State<DrawingArea> {
+  List<Uint8List> images = []; // 각각의 그림에 대한 이미지 데이터를 저장할 리스트
+
   GlobalKey globalKey = GlobalKey(); // GlobalKey 생성
 
-  Future<void> captureAndUpload() async {
-    // 캡쳐 및 업로드 함수 추가
+  Future<void> captureAndSave() async {
     RenderRepaintBoundary boundary =
         globalKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage();
     final imageBytes = await getBytesFromCanvas(image);
 
-    await uploadImage(imageBytes);
+    widget.onCapture(imageBytes); // capture and send the bytes to parent widget
+  }
+
+  void clearDrawing() {
+    setState(() {
+      lines.clear();
+    });
   }
 
   static Future<Uint8List> getBytesFromCanvas(ui.Image img) async {
@@ -98,34 +214,34 @@ class _DrawingAreaState extends State<DrawingArea> {
     return data!.buffer.asUint8List();
   }
 
-  static Future<void> uploadImage(Uint8List imageBytes) async {
-    var url = Uri.parse('http://127.0.0.1:5000/upload');
+  // static Future<void> uploadImage(Uint8List imageBytes) async {
+  //   var url = Uri.parse('http://127.0.0.1:5000/upload');
 
-    var request = http.MultipartRequest('POST', url);
+  //   var request = http.MultipartRequest('POST', url);
 
-    // 이미지 파일 생성 (임시 파일)
-    final tempDir = Directory.systemTemp;
-    final file = await File('${tempDir.path}/1.PNG').create();
-    await file.writeAsBytes(imageBytes);
+  //   // 이미지 파일 생성 (임시 파일)
+  //   final tempDir = Directory.systemTemp;
+  //   final file = await File('${tempDir.path}/1.PNG').create();
+  //   await file.writeAsBytes(imageBytes);
 
-    // MultipartRequest에 이미지 추가
-    request.files.add(await http.MultipartFile.fromPath(
-      'files',
-      file.path,
-      contentType: MediaType('image', 'png'),
-    ));
+  //   // MultipartRequest에 이미지 추가
+  //   request.files.add(await http.MultipartFile.fromPath(
+  //     'files',
+  //     file.path,
+  //     contentType: MediaType('image', 'png'),
+  //   ));
 
-    // 요청 보내기
-    var response = await request.send();
+  //   // 요청 보내기
+  //   var response = await request.send();
 
-    if (response.statusCode == HttpStatus.ok) {
-      print("Upload successful!");
-      await file.delete(); // 임시 파일 삭제
-    } else {
-      print("Upload failed with status code ${response.statusCode}.");
-      await file.delete(); // 임시 파일 삭제
-    }
-  }
+  //   if (response.statusCode == HttpStatus.ok) {
+  //     print("Upload successful!");
+  //     await file.delete(); // 임시 파일 삭제
+  //   } else {
+  //     print("Upload failed with status code ${response.statusCode}.");
+  //     await file.delete(); // 임시 파일 삭제
+  //   }
+  // }
 
   List<List<Offset>> lines = <List<Offset>>[]; // 여러 개의 선을 저장할 수 있는 리스트 생성
   List<Offset> currentLine = <Offset>[];
@@ -182,10 +298,6 @@ class _DrawingAreaState extends State<DrawingArea> {
           ),
         ),
         const SizedBox(height: 10),
-        ElevatedButton(
-          onPressed: captureAndUpload,
-          child: const Text('Capture and Upload'),
-        )
       ],
     );
   }
