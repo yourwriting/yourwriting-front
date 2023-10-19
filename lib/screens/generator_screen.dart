@@ -167,14 +167,52 @@ class _DrawingSessionState extends State<DrawingSession> {
             final drawingAreaState =
                 _drawingAreaKey.currentState as _DrawingAreaState;
             await drawingAreaState.captureAndSave();
-            drawingAreaState.clearDrawing();
+            if (currentStep >= 39) {
+              uploadImages();
+            } else {
+              drawingAreaState.clearDrawing();
+            }
           },
-          child: const Text('Next'),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.transparent),
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            elevation: MaterialStateProperty.all(0),
+            overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+              if (states.contains(MaterialState.pressed)) {
+                return Colors.grey
+                    .withOpacity(0.3); // color when the button is pressed
+              }
+              return null;
+            }),
+          ),
+          child: Text(
+            currentStep >= 39 ? 'Upload All' : 'Next',
+            style: const TextStyle(
+                fontFamily: "Pretendard-Regular", color: Colors.black),
+          ),
         ),
-        ElevatedButton(
-          onPressed: uploadImages,
-          child: const Text('Upload All'),
-        ),
+        // ElevatedButton(
+        //   onPressed: uploadImages,
+        //   style: ButtonStyle(
+        //     backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        //     shadowColor: MaterialStateProperty.all(Colors.transparent),
+        //     elevation: MaterialStateProperty.all(0),
+        //     overlayColor: MaterialStateProperty.resolveWith<Color?>(
+        //         (Set<MaterialState> states) {
+        //       if (states.contains(MaterialState.pressed)) {
+        //         return Colors.grey
+        //             .withOpacity(0.3); // color when the button is pressed
+        //       }
+        //       return null;
+        //     }),
+        //   ),
+        //   child: const Text(
+        //     'Upload All',
+        //     style: TextStyle(
+        //         fontFamily: "Pretendard-Regular", color: Colors.black),
+        //   ),
+        // ),
       ],
     );
   }
