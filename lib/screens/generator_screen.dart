@@ -40,26 +40,7 @@ class GeneratorScreen extends StatelessWidget {
                     children: [
                       SizedBox(height: 200),
                       Center(
-                        // child: Column(
-                        //   children: [
-                        //     const SizedBox(height: 200),
-                        //     RepaintBoundary(
-                        //       key: UniqueKey(), // 여기에서 UniqueKey 사용
-                        //       child: Container(
-                        //         decoration: BoxDecoration(
-                        //             color: Colors.white,
-                        //             borderRadius: BorderRadius.circular(30)),
                         child: DrawingSession(),
-                        //child: DrawingArea(),
-                        // ),
-                        // ),
-                        //const SizedBox(height: 10),
-                        // ElevatedButton(
-                        //   onPressed: _DrawingAreaState.captureAndUpload,
-                        //   child: const Text('Capture and Upload'),
-                        // )
-                        //],
-                        // ),
                       ),
                     ],
                   ),
@@ -150,6 +131,31 @@ class _DrawingSessionState extends State<DrawingSession> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        ElevatedButton(
+          onPressed: () async {
+            final drawingAreaState =
+                _drawingAreaKey.currentState as _DrawingAreaState;
+            drawingAreaState.clearDrawing();
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.transparent),
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            elevation: MaterialStateProperty.all(0),
+            overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+              if (states.contains(MaterialState.pressed)) {
+                return Colors.grey
+                    .withOpacity(0.3); // color when the button is pressed
+              }
+              return null;
+            }),
+          ),
+          child: const Text(
+            '지우개',
+            style: TextStyle(
+                fontFamily: "Pretendard-Regular", color: Colors.black),
+          ),
+        ),
         if (images.isNotEmpty) Image.memory(images.last), // 마지막으로 그린 이미지 표시
         DrawingArea(
           key: _drawingAreaKey,
@@ -168,7 +174,32 @@ class _DrawingSessionState extends State<DrawingSession> {
                 _drawingAreaKey.currentState as _DrawingAreaState;
             await drawingAreaState.captureAndSave();
             if (currentStep >= 39) {
-              uploadImages();
+              // Show an alert dialog
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Alert'),
+                    content: const Text('모든 글자를 전송합니다.'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('OK'),
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ).then((_) {
+                // After closing the dialog
+                uploadImages();
+                Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return const HomeScreen();
+                  },
+                ));
+              });
             } else {
               drawingAreaState.clearDrawing();
             }
@@ -192,27 +223,6 @@ class _DrawingSessionState extends State<DrawingSession> {
                 fontFamily: "Pretendard-Regular", color: Colors.black),
           ),
         ),
-        // ElevatedButton(
-        //   onPressed: uploadImages,
-        //   style: ButtonStyle(
-        //     backgroundColor: MaterialStateProperty.all(Colors.transparent),
-        //     shadowColor: MaterialStateProperty.all(Colors.transparent),
-        //     elevation: MaterialStateProperty.all(0),
-        //     overlayColor: MaterialStateProperty.resolveWith<Color?>(
-        //         (Set<MaterialState> states) {
-        //       if (states.contains(MaterialState.pressed)) {
-        //         return Colors.grey
-        //             .withOpacity(0.3); // color when the button is pressed
-        //       }
-        //       return null;
-        //     }),
-        //   ),
-        //   child: const Text(
-        //     'Upload All',
-        //     style: TextStyle(
-        //         fontFamily: "Pretendard-Regular", color: Colors.black),
-        //   ),
-        // ),
       ],
     );
   }
@@ -251,35 +261,6 @@ class _DrawingAreaState extends State<DrawingArea> {
     final ByteData? data = await img.toByteData(format: ui.ImageByteFormat.png);
     return data!.buffer.asUint8List();
   }
-
-  // static Future<void> uploadImage(Uint8List imageBytes) async {
-  //   var url = Uri.parse('http://127.0.0.1:5000/upload');
-
-  //   var request = http.MultipartRequest('POST', url);
-
-  //   // 이미지 파일 생성 (임시 파일)
-  //   final tempDir = Directory.systemTemp;
-  //   final file = await File('${tempDir.path}/1.PNG').create();
-  //   await file.writeAsBytes(imageBytes);
-
-  //   // MultipartRequest에 이미지 추가
-  //   request.files.add(await http.MultipartFile.fromPath(
-  //     'files',
-  //     file.path,
-  //     contentType: MediaType('image', 'png'),
-  //   ));
-
-  //   // 요청 보내기
-  //   var response = await request.send();
-
-  //   if (response.statusCode == HttpStatus.ok) {
-  //     print("Upload successful!");
-  //     await file.delete(); // 임시 파일 삭제
-  //   } else {
-  //     print("Upload failed with status code ${response.statusCode}.");
-  //     await file.delete(); // 임시 파일 삭제
-  //   }
-  // }
 
   List<List<Offset>> lines = <List<Offset>>[]; // 여러 개의 선을 저장할 수 있는 리스트 생성
   List<Offset> currentLine = <Offset>[];
