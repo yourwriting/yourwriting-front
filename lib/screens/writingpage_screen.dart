@@ -137,7 +137,10 @@ class WritingScreenState extends State<WritingScreen> {
                   ),
                   child: const Text(
                     '완료',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Pretendard-Regular",
+                    ),
                   ),
                 )
               ],
@@ -161,6 +164,7 @@ class WritingScreenState extends State<WritingScreen> {
                                 : formattedDate,
                             style: const TextStyle(
                               fontSize: 18,
+                              fontFamily: "Pretendard-Regular",
                             ),
                           ),
                         ],

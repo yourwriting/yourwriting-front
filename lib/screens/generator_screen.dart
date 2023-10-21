@@ -23,22 +23,26 @@ class GeneratorScreen extends StatelessWidget {
               const SizedBox(height: 50),
               Stack(
                 children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute<void>(
-                            builder: (BuildContext context) {
-                          return const HomeScreen();
-                        }));
-                      },
-                      iconSize: 31,
-                      icon: const Icon(Icons.arrow_back_ios),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 20),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                            return const HomeScreen();
+                          }));
+                        },
+                        iconSize: 31,
+                        icon: const Icon(Icons.arrow_back_ios),
+                      ),
                     ),
                   ),
                   const Column(
                     children: [
-                      SizedBox(height: 200),
+                      SizedBox(height: 190),
                       Center(
                         child: DrawingSession(),
                       ),
@@ -46,7 +50,6 @@ class GeneratorScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 15),
             ],
           ),
         ),
@@ -64,6 +67,47 @@ class DrawingSession extends StatefulWidget {
 
 class _DrawingSessionState extends State<DrawingSession> {
   List<Uint8List> images = []; // 각각의 그림에 대한 이미지 데이터를 저장할 리스트
+  List<String> nowJamo = [
+    "ㄱ",
+    "ㄲ",
+    "ㄴ",
+    "ㄷ",
+    "ㄸ",
+    "ㄹ",
+    "ㅁ",
+    "ㅂ",
+    "ㅃ",
+    "ㅅ",
+    "ㅆ",
+    "ㅇ",
+    "ㅈ",
+    "ㅉ",
+    "ㅊ",
+    "ㅋ",
+    "ㅍ",
+    "ㅎ",
+    "ㅏ",
+    "ㅐ",
+    "ㅑ",
+    "ㅒ",
+    "ㅓ",
+    "ㅔ",
+    "ㅕ",
+    "ㅖ",
+    "ㅗ",
+    "ㅘ",
+    "ㅙ",
+    "ㅚ",
+    "ㅛ",
+    "ㅜ",
+    "ㅝ",
+    "ㅞ",
+    "ㅟ",
+    "ㅠ",
+    "ㅡ",
+    "ㅢ",
+    "ㅣ"
+  ];
   int currentStep = 0; // 현재 그리고 있는 글자의 인덱스
   final GlobalKey<_DrawingAreaState> _drawingAreaKey = GlobalKey();
 
@@ -76,14 +120,6 @@ class _DrawingSessionState extends State<DrawingSession> {
 
     await file.writeAsBytes(imageBytes);
   }
-
-  // void captureImage(Uint8List imageBytes) async {
-  //   // 이미지 파일 생성 (임시 파일)
-  //   final tempDir = Directory.systemTemp;
-  //   final file = await File('${tempDir.path}/${currentStep + 1}.PNG').create();
-
-  //   await file.writeAsBytes(imageBytes);
-  // }
 
   Future<void> uploadImages() async {
     var url = Uri.parse('http://127.0.0.1:5000/upload');
@@ -129,102 +165,136 @@ class _DrawingSessionState extends State<DrawingSession> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(
-          onPressed: () async {
-            final drawingAreaState =
-                _drawingAreaKey.currentState as _DrawingAreaState;
-            drawingAreaState.clearDrawing();
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.transparent),
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            elevation: MaterialStateProperty.all(0),
-            overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-              if (states.contains(MaterialState.pressed)) {
-                return Colors.grey
-                    .withOpacity(0.3); // color when the button is pressed
-              }
-              return null;
-            }),
-          ),
-          child: const Text(
-            '지우개',
-            style: TextStyle(
-                fontFamily: "Pretendard-Regular", color: Colors.black),
-          ),
+    return Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 70,
         ),
-        if (images.isNotEmpty) Image.memory(images.last), // 마지막으로 그린 이미지 표시
-        DrawingArea(
-          key: _drawingAreaKey,
-          onCapture: (imageBytes) async {
-            await captureImage(imageBytes);
-            if (currentStep < 39) {
-              setState(() {
-                currentStep++;
-              });
-            }
-          },
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            final drawingAreaState =
-                _drawingAreaKey.currentState as _DrawingAreaState;
-            await drawingAreaState.captureAndSave();
-            if (currentStep >= 39) {
-              // Show an alert dialog
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Alert'),
-                    content: const Text('모든 글자를 전송합니다.'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('OK'),
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
-                        },
-                      ),
-                    ],
-                  );
-                },
-              ).then((_) {
-                // After closing the dialog
-                uploadImages();
-                Navigator.push(context, MaterialPageRoute<void>(
-                  builder: (BuildContext context) {
-                    return const HomeScreen();
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    final drawingAreaState =
+                        _drawingAreaKey.currentState as _DrawingAreaState;
+                    drawingAreaState.clearDrawing();
                   },
-                ));
-              });
-            } else {
-              drawingAreaState.clearDrawing();
-            }
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.transparent),
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            elevation: MaterialStateProperty.all(0),
-            overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-              if (states.contains(MaterialState.pressed)) {
-                return Colors.grey
-                    .withOpacity(0.3); // color when the button is pressed
-              }
-              return null;
-            }),
-          ),
-          child: Text(
-            currentStep >= 39 ? 'Upload All' : 'Next',
-            style: const TextStyle(
-                fontFamily: "Pretendard-Regular", color: Colors.black),
-          ),
-        ),
-      ],
-    );
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.transparent),
+                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                    elevation: MaterialStateProperty.all(0),
+                    overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) {
+                        return Colors.grey.withOpacity(
+                            0.3); // color when the button is pressed
+                      }
+                      return null;
+                    }),
+                  ),
+                  child: const Text(
+                    'erase',
+                    style: TextStyle(
+                        fontFamily: "SF-Pro-Display-Regular",
+                        color: Colors.black,
+                        fontSize: 16),
+                  ),
+                ),
+                Text(
+                  '글자: \' ${nowJamo[currentStep]} \'   ',
+                  style: const TextStyle(fontFamily: "Pretendard-Regular"),
+                ),
+              ],
+            ),
+            if (images.isNotEmpty) Image.memory(images.last), // 마지막으로 그린 이미지 표시
+            DrawingArea(
+              key: _drawingAreaKey,
+              onCapture: (imageBytes) async {
+                await captureImage(imageBytes);
+                if (currentStep < 39) {
+                  setState(() {
+                    currentStep++;
+                  });
+                }
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    final drawingAreaState =
+                        _drawingAreaKey.currentState as _DrawingAreaState;
+                    await drawingAreaState.captureAndSave();
+                    if (currentStep >= 39) {
+                      // Show an alert dialog
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Alert'),
+                            content: const Text(
+                              '모든 글자를 전송합니다.',
+                              style:
+                                  TextStyle(fontFamily: "Pretendard-Regular"),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text(
+                                  'OK',
+                                  style: TextStyle(
+                                      fontFamily: "SF-Pro-Display-Regular",
+                                      color: Colors.black),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ).then((_) {
+                        // After closing the dialog
+                        uploadImages();
+                        Navigator.push(context, MaterialPageRoute<void>(
+                          builder: (BuildContext context) {
+                            return const HomeScreen();
+                          },
+                        ));
+                      });
+                    } else {
+                      drawingAreaState.clearDrawing();
+                    }
+                  },
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.transparent),
+                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                    elevation: MaterialStateProperty.all(0),
+                    overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) {
+                        return Colors.grey.withOpacity(
+                            0.3); // color when the button is pressed
+                      }
+                      return null;
+                    }),
+                  ),
+                  child: Text(
+                    currentStep >= 39 ? 'upload All' : 'next',
+                    style: const TextStyle(
+                        fontFamily: "SF-Pro-Display-Regular",
+                        color: Colors.black,
+                        fontSize: 16),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ));
   }
 }
 
@@ -316,7 +386,7 @@ class _DrawingAreaState extends State<DrawingArea> {
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 5),
       ],
     );
   }

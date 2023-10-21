@@ -67,9 +67,21 @@ flutter:
     - family: FinalE
       fonts:
         - asset: assets/fonts/FinalE.ttf
+    - family: PretendardVariable
+      fonts:
+        - asset: assets/fonts/PretendardVariable.ttf
     - family: Pretendard-Regular
       fonts:
         - asset: assets/fonts/Pretendard-Regular.otf
+    - family: SF-Pro-Rounded-Thin
+      fonts:
+        - asset: assets/fonts/SF-Pro-Rounded-Thin.otf
+    - family: SF-Pro-Display-Light
+      fonts:
+        - asset: assets/fonts/SF-Pro-Display-Light.otf
+    - family: SF-Pro-Display-Regular
+      fonts:
+        - asset: assets/fonts/SF-Pro-Display-Regular.otf
     - family: UhBee-DongKyung
       fonts:
         - asset: assets/fonts/UhBee-DongKyung.ttf

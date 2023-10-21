@@ -155,10 +155,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: const Text(
                           'my font',
                           textAlign: TextAlign.center,
+                          style: TextStyle(fontFamily: "Pretendard-Regular"),
                         ),
                       ),
                       const SizedBox(
-                        width: 25,
+                        width: 50,
                       ),
                       Column(
                         children: [
@@ -166,10 +167,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             //date,
                             formattedDate,
                             style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w400,
-                            ),
+                                color: Colors.black,
+                                fontSize: 17,
+                                fontFamily: "Pretendard-Regular"),
                           ),
                           const SizedBox(
                             height: 7,
@@ -184,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: ColorStyles.mainblack,
                           ),
                           SizedBox(
-                            height: 15,
+                            height: 5,
                           ),
                         ],
                       ),

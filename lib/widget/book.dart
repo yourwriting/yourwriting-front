@@ -102,7 +102,7 @@ class _WrittenBookState extends State<WrittenBook> {
                         borderRadius: BorderRadius.circular(15)),
                     textStyle: const TextStyle(fontSize: 14),
                     padding: const EdgeInsets.symmetric(
-                        vertical: 75, horizontal: 25),
+                        vertical: 65, horizontal: 25),
                   ),
                   child: Center(
                       child: Column(children: [
@@ -112,14 +112,19 @@ class _WrittenBookState extends State<WrittenBook> {
                         color: Colors.black,
                         fontSize: 17,
                         fontWeight: FontWeight.w600,
+                        fontFamily: "PretendardVariable",
                       ),
                       textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(
+                      height: 3,
                     ),
                     Text(
                       widget.date,
                       style: const TextStyle(
+                        fontFamily: "PretendardVariable",
                         color: Colors.black,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                       textAlign: TextAlign.center,
                     )
