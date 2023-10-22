@@ -240,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Column(
                             children: snapshot.data!
                                 .map((note) => WrittenBook(
-                                    date: note.updatedAt,
+                                    date: note.createdAt,
                                     title: note.title,
                                     noteId: note.noteId,
                                     onDelete: () {

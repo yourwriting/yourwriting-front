@@ -34,6 +34,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 style: TextStyle(
                   color: ColorStyles.mainblack,
                   fontSize: 35,
+                  fontFamily: "SF-Pro-Display-Regular",
                 ),
               ),
             ],

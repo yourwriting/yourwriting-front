@@ -84,6 +84,7 @@ class _DrawingSessionState extends State<DrawingSession> {
     "ㅉ",
     "ㅊ",
     "ㅋ",
+    "ㅌ",
     "ㅍ",
     "ㅎ",
     "ㅏ",
@@ -122,7 +123,9 @@ class _DrawingSessionState extends State<DrawingSession> {
   }
 
   Future<void> uploadImages() async {
-    var url = Uri.parse('http://127.0.0.1:5000/upload');
+    var url = Uri.parse(
+        'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:5000/font/upload');
+    //'http://127.0.0.1:5000/upload');
     var request = http.MultipartRequest('POST', url);
 
     for (int i = 1; i <= 40; i++) {
@@ -229,7 +232,6 @@ class _DrawingSessionState extends State<DrawingSession> {
                         _drawingAreaKey.currentState as _DrawingAreaState;
                     await drawingAreaState.captureAndSave();
                     if (currentStep >= 39) {
-                      // Show an alert dialog
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -265,6 +267,7 @@ class _DrawingSessionState extends State<DrawingSession> {
                           },
                         ));
                       });
+                      //uploadImages();
                     } else {
                       drawingAreaState.clearDrawing();
                     }
@@ -284,7 +287,7 @@ class _DrawingSessionState extends State<DrawingSession> {
                     }),
                   ),
                   child: Text(
-                    currentStep >= 39 ? 'upload All' : 'next',
+                    currentStep >= 39 ? 'upload all' : 'next',
                     style: const TextStyle(
                         fontFamily: "SF-Pro-Display-Regular",
                         color: Colors.black,
@@ -402,7 +405,7 @@ class DrawingPainter extends CustomPainter {
     Paint paint = Paint()
       ..color = Colors.black
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 25.0;
+      ..strokeWidth = 20.0;
 
     for (var line in lines) {
       for (int i = 0; i < line.length - 1; i++) {
