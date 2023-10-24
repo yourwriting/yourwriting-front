@@ -26,11 +26,20 @@ class _LandingScreenState extends State<LandingScreen> {
       home: Scaffold(
         backgroundColor: ColorStyles.mainbackground,
         body: Center(
-          child: Column(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'yourwriting',
+                'your',
+                style: TextStyle(
+                  color: ColorStyles.mainblack,
+                  fontSize: 35,
+                  fontFamily: "SF-Pro-Display-Regular",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                'writing',
                 style: TextStyle(
                   color: ColorStyles.mainblack,
                   fontSize: 35,
