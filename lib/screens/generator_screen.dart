@@ -8,6 +8,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 
 class GeneratorScreen extends StatelessWidget {
   const GeneratorScreen({Key? key}) : super(key: key);
@@ -124,8 +127,8 @@ class _DrawingSessionState extends State<DrawingSession> {
 
   Future<void> uploadImages() async {
     var url = Uri.parse(
-        'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:5000/font/upload');
-    //'http://127.0.0.1:5000/upload');
+        //'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:5000/font/upload');
+        'http://127.0.0.1:5000/upload');
     var request = http.MultipartRequest('POST', url);
 
     for (int i = 1; i <= 40; i++) {
@@ -164,6 +167,27 @@ class _DrawingSessionState extends State<DrawingSession> {
         }
       }
     }
+  }
+
+  Future<void> loadFont() async {
+    var httpClient = http.Client();
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:5000/font/create'));
+    var response = await httpClient.send(request);
+
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    File fontFile = File('${appDocDir.path}/font.ttf');
+
+    //같은 이름의 파일이 있을 때는 저절로 덮어씀.
+    List<int> bytes = await response.stream.toBytes();
+    await fontFile.writeAsBytes(bytes);
+
+    var fontLoader = FontLoader('font');
+    fontLoader.addFont(
+        Future.value(ByteData.view(fontFile.readAsBytesSync().buffer)));
+    await fontLoader.load();
   }
 
   @override
@@ -235,15 +259,15 @@ class _DrawingSessionState extends State<DrawingSession> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Alert'),
+                          return CupertinoAlertDialog(
+                            title: const Text('업로드'),
                             content: const Text(
                               '모든 글자를 전송합니다.',
                               style:
                                   TextStyle(fontFamily: "Pretendard-Regular"),
                             ),
                             actions: <Widget>[
-                              TextButton(
+                              CupertinoDialogAction(
                                 child: const Text(
                                   'OK',
                                   style: TextStyle(
@@ -405,7 +429,7 @@ class DrawingPainter extends CustomPainter {
     Paint paint = Paint()
       ..color = Colors.black
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 20.0;
+      ..strokeWidth = 17.0;
 
     for (var line in lines) {
       for (int i = 0; i < line.length - 1; i++) {

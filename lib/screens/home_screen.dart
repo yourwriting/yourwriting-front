@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:realwriting/widget/book.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
 
 class Note {
   final int noteId;
@@ -35,17 +38,17 @@ class Note {
   }
 }
 
-// Future<List<Note>> fetchNotes() async {
-//   final response = await http.get(Uri.parse(
-//       'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/home'));
+Future<void> loadSavedFont() async {
+  Directory appDocDir = await getApplicationDocumentsDirectory();
+  File fontFile = File('${appDocDir.path}/font.ttf');
 
-//   if (response.statusCode == 200) {
-//     List jsonResponse = convert.jsonDecode(response.body)['result'];
-//     return jsonResponse.map((item) => Note.fromJson(item)).toList();
-//   } else {
-//     throw Exception('Failed to load notes');
-//   }
-// }
+  if (await fontFile.exists()) {
+    var fontLoader = FontLoader('MyFont');
+    fontLoader.addFont(
+        Future.value(ByteData.view(fontFile.readAsBytesSync().buffer)));
+    await fontLoader.load();
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   final int? noteId;
@@ -62,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     futureNotes = fetchNotes();
+    loadSavedFont();
   }
 
   Future<List<Note>> fetchNotes() async {
