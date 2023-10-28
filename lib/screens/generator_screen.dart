@@ -171,10 +171,10 @@ class _DrawingSessionState extends State<DrawingSession> {
 
   Future<void> loadFont() async {
     var httpClient = http.Client();
-    var request = http.Request(
-        'GET',
-        Uri.parse(
-            'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:5000/font/create'));
+    var request = http.Request('GET', Uri.parse(
+        // 'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:5000/font/create'));
+        'http://127.0.0.1:5000/create'));
+
     var response = await httpClient.send(request);
 
     Directory appDocDir = await getApplicationDocumentsDirectory();
@@ -429,7 +429,7 @@ class DrawingPainter extends CustomPainter {
     Paint paint = Paint()
       ..color = Colors.black
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 17.0;
+      ..strokeWidth = 18.0;
 
     for (var line in lines) {
       for (int i = 0; i < line.length - 1; i++) {
