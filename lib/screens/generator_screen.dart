@@ -282,9 +282,10 @@ class _DrawingSessionState extends State<DrawingSession> {
                             ],
                           );
                         },
-                      ).then((_) {
+                      ).then((_) async {
                         // After closing the dialog
-                        uploadImages();
+                        await uploadImages();
+                        await loadFont();
                         Navigator.push(context, MaterialPageRoute<void>(
                           builder: (BuildContext context) {
                             return const HomeScreen();
