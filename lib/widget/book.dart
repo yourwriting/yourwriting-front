@@ -56,7 +56,7 @@ class _WrittenBookState extends State<WrittenBook> {
             context: context,
             builder: (BuildContext dialogContext) => CupertinoAlertDialog(
               title: const Text('노트 삭제'),
-              content: Text('${widget.date} 을(를) 정말 삭제하시겠습니까?'),
+              content: Text('${widget.date}를 정말 삭제하시겠습니까?'),
               actions: [
                 CupertinoDialogAction(
                   child: const Text('아니오'),
