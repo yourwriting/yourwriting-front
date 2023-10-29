@@ -15,6 +15,7 @@ class LandingScreen extends StatefulWidget {
 class _LandingScreenState extends State<LandingScreen> {
   @override
   void initState() {
+    super.initState();
     Timer(const Duration(milliseconds: 1300), () {
       Get.to(const HomeScreen());
     });
