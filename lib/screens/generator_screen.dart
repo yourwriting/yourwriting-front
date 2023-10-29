@@ -127,8 +127,8 @@ class _DrawingSessionState extends State<DrawingSession> {
 
   Future<void> uploadImages() async {
     var url = Uri.parse(
-        //'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:5000/font/upload');
-        'http://127.0.0.1:5000/upload');
+        'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:5000/font/upload');
+    //'http://127.0.0.1:5000/upload');
     var request = http.MultipartRequest('POST', url);
 
     for (int i = 1; i <= 40; i++) {
@@ -171,9 +171,11 @@ class _DrawingSessionState extends State<DrawingSession> {
 
   Future<void> loadFont() async {
     var httpClient = http.Client();
-    var request = http.Request('GET', Uri.parse(
-        // 'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:5000/font/create'));
-        'http://127.0.0.1:5000/create'));
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:5000/font/create'));
+    //'http://127.0.0.1:5000/create'));
 
     var response = await httpClient.send(request);
 
