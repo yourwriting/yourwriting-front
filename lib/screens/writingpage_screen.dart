@@ -5,6 +5,11 @@ import 'package:realwriting/style.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:core';
+import 'package:flutter/rendering.dart';
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 
 class WritingScreen extends StatefulWidget {
   final int? noteId;
@@ -68,9 +73,22 @@ class WritingScreenState extends State<WritingScreen> {
     }
   }
 
+  Future<void> loadSavedFont() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    File fontFile = File('${appDocDir.path}/font.ttf');
+
+    if (await fontFile.exists()) {
+      var fontLoader = FontLoader('MyFont');
+      fontLoader.addFont(
+          Future.value(ByteData.view(fontFile.readAsBytesSync().buffer)));
+      await fontLoader.load();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    loadSavedFont();
 
     fetchTitle().then((title) {
       _titleEditingController.text = title;
