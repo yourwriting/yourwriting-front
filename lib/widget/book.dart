@@ -24,6 +24,9 @@ class WrittenBook extends StatefulWidget {
 }
 
 class _WrittenBookState extends State<WrittenBook> {
+  String accessToken =
+      "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
+
   @override
   Widget build(BuildContext context) {
     Future<void> deleteNote(int noteId) async {
@@ -31,7 +34,12 @@ class _WrittenBookState extends State<WrittenBook> {
           "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note/${widget.noteId}";
       Uri uri = Uri.parse(urlString);
 
-      final response = await http.delete(uri);
+      final response = await http.delete(
+        uri,
+        headers: <String, String>{
+          'Authorization': accessToken,
+        },
+      );
 
       if (response.statusCode == 200) {
         developer.log('노트가 성공적으로 삭제되었습니다.');

@@ -21,7 +21,9 @@ class WritingScreen extends StatefulWidget {
 class WritingScreenState extends State<WritingScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   final TextEditingController _titleEditingController = TextEditingController();
-  double textSize = 16.0;
+  String accessToken =
+      "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
+  double textSize = 25.0;
 
   Future<String> fetchContent() async {
     String urlString =
@@ -31,8 +33,7 @@ class WritingScreenState extends State<WritingScreen> {
     final response = await http.get(
       uri,
       headers: <String, String>{
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczMDk0MywiZXhwIjoxNjk4NzMzNTM1fQ.D85ucHz7jIUArAD7zzDKLVeD4CHvygnFzGQrxyHBfV9KkKd4DOSbd15rg_Mq_OShQRQwXwtNBxB_Jr5jbTJiZQ',
+        'Authorization': accessToken,
       },
     );
 
@@ -53,8 +54,7 @@ class WritingScreenState extends State<WritingScreen> {
       uri,
       headers: <String, String>{
         'Content-Type': 'application/json',
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczMDk0MywiZXhwIjoxNjk4NzMzNTM1fQ.D85ucHz7jIUArAD7zzDKLVeD4CHvygnFzGQrxyHBfV9KkKd4DOSbd15rg_Mq_OShQRQwXwtNBxB_Jr5jbTJiZQ',
+        'Authorization': accessToken,
       }, // Add this line
       body: jsonEncode({'title': newTitle, 'content': newContent}),
     );
@@ -74,8 +74,7 @@ class WritingScreenState extends State<WritingScreen> {
     final response = await http.get(
       uri,
       headers: <String, String>{
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczMDk0MywiZXhwIjoxNjk4NzMzNTM1fQ.D85ucHz7jIUArAD7zzDKLVeD4CHvygnFzGQrxyHBfV9KkKd4DOSbd15rg_Mq_OShQRQwXwtNBxB_Jr5jbTJiZQ',
+        'Authorization': accessToken,
       },
     );
 
@@ -122,7 +121,7 @@ class WritingScreenState extends State<WritingScreen> {
     String formattedDate = "${now.year}-$formattedMonth-$formattedDay";
 
     final FocusNode focusNode = FocusNode();
-    List<double> textSizeOptions = [14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0];
+    List<double> textSizeOptions = [25.0, 26.0, 27.0, 28.0, 29.0, 30.0];
 
     return Scaffold(
       backgroundColor: ColorStyles.mainbackground,
@@ -259,7 +258,7 @@ class WritingScreenState extends State<WritingScreen> {
                           controller: _titleEditingController,
                           style: const TextStyle(
                               fontFamily: 'your-writing-thin',
-                              fontSize: 25,
+                              fontSize: 30,
                               fontWeight: FontWeight.w600),
                           decoration: const InputDecoration(
                               hintText: '제목을 적어보세요', border: InputBorder.none),
@@ -270,8 +269,10 @@ class WritingScreenState extends State<WritingScreen> {
                           controller: _textEditingController,
                           onChanged: (value) {},
                           style: TextStyle(
-                              fontFamily: 'your-writing-thin',
-                              fontSize: textSize),
+                            fontFamily: 'your-writing-thin',
+                            fontSize: textSize,
+                            height: 1.5,
+                          ),
                           maxLines: null,
                           decoration: const InputDecoration(
                               hintText: '오늘의 글을 적어보세요.',

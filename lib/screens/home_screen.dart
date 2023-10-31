@@ -59,6 +59,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String accessToken =
+      "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
   late Future<List<Note>> futureNotes;
 
   @override
@@ -73,8 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Uri.parse(
           'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/home'),
       headers: <String, String>{
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczMDk0MywiZXhwIjoxNjk4NzMzNTM1fQ.D85ucHz7jIUArAD7zzDKLVeD4CHvygnFzGQrxyHBfV9KkKd4DOSbd15rg_Mq_OShQRQwXwtNBxB_Jr5jbTJiZQ',
+        'Authorization': accessToken,
       },
     );
 
@@ -96,8 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
       uri,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczMDk0MywiZXhwIjoxNjk4NzMzNTM1fQ.D85ucHz7jIUArAD7zzDKLVeD4CHvygnFzGQrxyHBfV9KkKd4DOSbd15rg_Mq_OShQRQwXwtNBxB_Jr5jbTJiZQ',
+        'Authorization': accessToken,
       },
       body: convert.jsonEncode(<String, String>{
         'title': '',

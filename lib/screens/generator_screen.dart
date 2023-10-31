@@ -69,6 +69,8 @@ class DrawingSession extends StatefulWidget {
 }
 
 class _DrawingSessionState extends State<DrawingSession> {
+  String accessToken =
+      "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
   List<Uint8List> images = []; // 각각의 그림에 대한 이미지 데이터를 저장할 리스트
   List<String> nowJamo = [
     "ㄱ",
