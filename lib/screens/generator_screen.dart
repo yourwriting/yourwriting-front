@@ -11,6 +11,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
+import 'dart:convert';
 
 class GeneratorScreen extends StatelessWidget {
   const GeneratorScreen({Key? key}) : super(key: key);
@@ -171,6 +172,57 @@ class _DrawingSessionState extends State<DrawingSession> {
     }
   }
 
+  Future<void> combineImages() async {
+    String urlString =
+        'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:5000/font/combine';
+    //'http://127.0.0.1:5000/upload');
+
+    Uri uri = Uri.parse(urlString);
+    final response = await http.get(
+      uri,
+    );
+
+    if (response.statusCode == 200) {
+      print("Success");
+    } else {
+      throw Exception('Failed to load notes');
+    }
+  }
+
+  Future<void> concatImages() async {
+    String urlString =
+        'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:5000/font/concat';
+    //'http://127.0.0.1:5000/upload');
+
+    Uri uri = Uri.parse(urlString);
+    final response = await http.get(
+      uri,
+    );
+
+    if (response.statusCode == 200) {
+      print("Success");
+    } else {
+      throw Exception('Failed to load notes');
+    }
+  }
+
+  Future<void> createfont() async {
+    String urlString =
+        'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:5000/font/create';
+    //'http://127.0.0.1:5000/upload');
+
+    Uri uri = Uri.parse(urlString);
+    final response = await http.get(
+      uri,
+    );
+
+    if (response.statusCode == 200) {
+      print("Success");
+    } else {
+      throw Exception('Failed to load notes');
+    }
+  }
+
   Future<void> loadFont() async {
     var httpClient = http.Client();
     var request = http.Request(
@@ -279,8 +331,8 @@ class _DrawingSessionState extends State<DrawingSession> {
                                       color: Colors.black),
                                 ),
                                 onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
+                                  // Navigator.of(context)
+                                  //     .pop(); // Close the dialog
                                 },
                               ),
                             ],
@@ -289,7 +341,10 @@ class _DrawingSessionState extends State<DrawingSession> {
                       ).then((_) async {
                         // After closing the dialog
                         await uploadImages();
-                        await loadFont();
+                        // await combineImages();
+                        // await concatImages();
+                        // await createfont();
+                        // await loadFont();
                         Navigator.push(context, MaterialPageRoute<void>(
                           builder: (BuildContext context) {
                             return const HomeScreen();
@@ -323,6 +378,34 @@ class _DrawingSessionState extends State<DrawingSession> {
                         fontSize: 16),
                   ),
                 ),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        await combineImages();
+                      },
+                      child: const Text('Combine Images'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await concatImages();
+                      },
+                      child: const Text('Concat Images'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await createfont();
+                      },
+                      child: const Text('Create Font'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await loadFont();
+                      },
+                      child: const Text('Load Font'),
+                    ),
+                  ],
+                )
               ],
             )
           ],
