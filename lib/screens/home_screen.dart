@@ -96,6 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
       uri,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':
+            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczMDk0MywiZXhwIjoxNjk4NzMzNTM1fQ.D85ucHz7jIUArAD7zzDKLVeD4CHvygnFzGQrxyHBfV9KkKd4DOSbd15rg_Mq_OShQRQwXwtNBxB_Jr5jbTJiZQ',
       },
       body: convert.jsonEncode(<String, String>{
         'title': '',
