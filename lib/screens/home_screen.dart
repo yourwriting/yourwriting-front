@@ -69,8 +69,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<List<Note>> fetchNotes() async {
-    final response = await http.get(Uri.parse(
-        'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/home'));
+    final response = await http.get(
+      Uri.parse(
+          'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/home'),
+      headers: <String, String>{
+        'Authorization':
+            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczMDk0MywiZXhwIjoxNjk4NzMzNTM1fQ.D85ucHz7jIUArAD7zzDKLVeD4CHvygnFzGQrxyHBfV9KkKd4DOSbd15rg_Mq_OShQRQwXwtNBxB_Jr5jbTJiZQ',
+      },
+    );
 
     if (response.statusCode == 200) {
       List jsonResponse =

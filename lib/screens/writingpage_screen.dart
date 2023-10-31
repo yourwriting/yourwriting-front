@@ -28,7 +28,13 @@ class WritingScreenState extends State<WritingScreen> {
         "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note/${widget.noteId}";
     Uri uri = Uri.parse(urlString);
 
-    final response = await http.get(uri);
+    final response = await http.get(
+      uri,
+      headers: <String, String>{
+        'Authorization':
+            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczMDk0MywiZXhwIjoxNjk4NzMzNTM1fQ.D85ucHz7jIUArAD7zzDKLVeD4CHvygnFzGQrxyHBfV9KkKd4DOSbd15rg_Mq_OShQRQwXwtNBxB_Jr5jbTJiZQ',
+      },
+    );
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
@@ -45,7 +51,11 @@ class WritingScreenState extends State<WritingScreen> {
 
     final response = await http.put(
       uri,
-      headers: {'Content-Type': 'application/json'}, // Add this line
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization':
+            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczMDk0MywiZXhwIjoxNjk4NzMzNTM1fQ.D85ucHz7jIUArAD7zzDKLVeD4CHvygnFzGQrxyHBfV9KkKd4DOSbd15rg_Mq_OShQRQwXwtNBxB_Jr5jbTJiZQ',
+      }, // Add this line
       body: jsonEncode({'title': newTitle, 'content': newContent}),
     );
 
@@ -61,7 +71,13 @@ class WritingScreenState extends State<WritingScreen> {
         "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note/${widget.noteId}";
     Uri uri = Uri.parse(urlString);
 
-    final response = await http.get(uri);
+    final response = await http.get(
+      uri,
+      headers: <String, String>{
+        'Authorization':
+            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczMDk0MywiZXhwIjoxNjk4NzMzNTM1fQ.D85ucHz7jIUArAD7zzDKLVeD4CHvygnFzGQrxyHBfV9KkKd4DOSbd15rg_Mq_OShQRQwXwtNBxB_Jr5jbTJiZQ',
+      },
+    );
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
