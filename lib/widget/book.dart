@@ -28,7 +28,7 @@ class _WrittenBookState extends State<WrittenBook> {
   Widget build(BuildContext context) {
     Future<void> deleteNote(int noteId) async {
       String urlString =
-          "http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/note/${widget.noteId}";
+          "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note/${widget.noteId}";
       Uri uri = Uri.parse(urlString);
 
       final response = await http.delete(uri);

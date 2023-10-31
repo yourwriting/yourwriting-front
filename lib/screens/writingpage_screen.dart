@@ -25,7 +25,7 @@ class WritingScreenState extends State<WritingScreen> {
 
   Future<String> fetchContent() async {
     String urlString =
-        "http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/note/${widget.noteId}";
+        "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note/${widget.noteId}";
     Uri uri = Uri.parse(urlString);
 
     final response = await http.get(uri);
@@ -40,7 +40,7 @@ class WritingScreenState extends State<WritingScreen> {
 
   Future<void> updateContent(String newTitle, String newContent) async {
     String urlString =
-        "http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/note/${widget.noteId}";
+        "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note/${widget.noteId}";
     Uri uri = Uri.parse(urlString);
 
     final response = await http.put(
@@ -58,7 +58,7 @@ class WritingScreenState extends State<WritingScreen> {
 
   Future<String> fetchTitle() async {
     String urlString =
-        "http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/note/${widget.noteId}";
+        "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note/${widget.noteId}";
     Uri uri = Uri.parse(urlString);
 
     final response = await http.get(uri);

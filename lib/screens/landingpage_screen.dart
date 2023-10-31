@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:realwriting/screens/home_screen.dart';
 import 'package:realwriting/style.dart';

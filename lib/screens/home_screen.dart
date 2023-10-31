@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<List<Note>> fetchNotes() async {
     final response = await http.get(Uri.parse(
-        'http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/home'));
+        'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/home'));
 
     if (response.statusCode == 200) {
       List jsonResponse =
@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<int> createNote() async {
     String urlString =
-        "http://ec2-3-39-143-31.ap-northeast-2.compute.amazonaws.com:8080/api/note";
+        "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note";
     Uri uri = Uri.parse(urlString);
 
     final response = await http.post(
