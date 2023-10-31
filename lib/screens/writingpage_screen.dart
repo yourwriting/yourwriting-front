@@ -23,7 +23,7 @@ class WritingScreenState extends State<WritingScreen> {
   final TextEditingController _titleEditingController = TextEditingController();
   String accessToken =
       "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
-  double textSize = 25.0;
+  double textSize = 23.0;
 
   Future<String> fetchContent() async {
     String urlString =
@@ -121,7 +121,7 @@ class WritingScreenState extends State<WritingScreen> {
     String formattedDate = "${now.year}-$formattedMonth-$formattedDay";
 
     final FocusNode focusNode = FocusNode();
-    List<double> textSizeOptions = [25.0, 26.0, 27.0, 28.0, 29.0, 30.0];
+    List<double> textSizeOptions = [24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0];
 
     return Scaffold(
       backgroundColor: ColorStyles.mainbackground,
@@ -246,7 +246,7 @@ class WritingScreenState extends State<WritingScreen> {
             ),
             SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(15.0),
                 child: FutureBuilder<String>(
                   future: fetchContent(),
                   builder:
@@ -269,10 +269,10 @@ class WritingScreenState extends State<WritingScreen> {
                           controller: _textEditingController,
                           onChanged: (value) {},
                           style: TextStyle(
-                            fontFamily: 'your-writing-thin',
-                            fontSize: textSize,
-                            height: 1.5,
-                          ),
+                              fontFamily: 'your-writing-thin',
+                              fontSize: textSize,
+                              height: 1.5,
+                              fontWeight: FontWeight.w400),
                           maxLines: null,
                           decoration: const InputDecoration(
                               hintText: '오늘의 글을 적어보세요.',
