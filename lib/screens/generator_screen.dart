@@ -378,34 +378,34 @@ class _DrawingSessionState extends State<DrawingSession> {
                         fontSize: 16),
                   ),
                 ),
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        await combineImages();
-                      },
-                      child: const Text('Combine Images'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await concatImages();
-                      },
-                      child: const Text('Concat Images'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await createfont();
-                      },
-                      child: const Text('Create Font'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await loadFont();
-                      },
-                      child: const Text('Load Font'),
-                    ),
-                  ],
-                )
+                // Column(
+                //   children: [
+                //     ElevatedButton(
+                //       onPressed: () async {
+                //         await combineImages();
+                //       },
+                //       child: const Text('Combine Images'),
+                //     ),
+                //     ElevatedButton(
+                //       onPressed: () async {
+                //         await concatImages();
+                //       },
+                //       child: const Text('Concat Images'),
+                //     ),
+                //     ElevatedButton(
+                //       onPressed: () async {
+                //         await createfont();
+                //       },
+                //       child: const Text('Create Font'),
+                //     ),
+                //     ElevatedButton(
+                //       onPressed: () async {
+                //         await loadFont();
+                //       },
+                //       child: const Text('Load Font'),
+                //     ),
+                //   ],
+                // )
               ],
             )
           ],

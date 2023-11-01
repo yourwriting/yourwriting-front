@@ -100,8 +100,8 @@ class _HomeScreenState extends State<HomeScreen> {
         'Authorization': accessToken,
       },
       body: convert.jsonEncode(<String, String>{
-        'title': ' ',
-        'content': ' ',
+        'title': '',
+        'content': '',
       }),
     );
 
