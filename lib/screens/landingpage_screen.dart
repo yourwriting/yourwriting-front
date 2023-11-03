@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:realwriting/screens/home_screen.dart';
+import 'package:realwriting/screens/login_screen.dart';
 import 'package:realwriting/style.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +16,7 @@ class _LandingScreenState extends State<LandingScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(milliseconds: 1300), () {
-      Get.to(const HomeScreen());
+      Get.to(const LoginScreen());
     });
   }
 

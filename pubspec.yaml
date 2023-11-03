@@ -86,6 +86,15 @@ flutter:
     - family: your-writing-thin
       fonts:
         - asset: assets/fonts/font2.ttf
+    - family: your-writing-30
+      fonts:
+        - asset: assets/fonts/font4.ttf
+    - family: your-writing-20
+      fonts:
+        - asset: assets/fonts/font5.ttf
+    - family: your-writing-25
+      fonts:
+        - asset: assets/fonts/font6.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

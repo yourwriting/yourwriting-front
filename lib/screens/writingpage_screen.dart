@@ -134,10 +134,10 @@ class WritingScreenState extends State<WritingScreen> {
               children: [
                 IconButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute<void>(
-                        builder: (BuildContext context) {
-                      return const HomeScreen();
-                    }));
+                    // Navigator.push(context, MaterialPageRoute<void>(
+                    //     builder: (BuildContext context) {
+                    //   return const HomeScreen();
+                    // }));
                   },
                   iconSize: 31,
                   icon: const Icon(Icons.arrow_back_ios),
@@ -257,7 +257,7 @@ class WritingScreenState extends State<WritingScreen> {
                           // 제목 입력 필드 추가
                           controller: _titleEditingController,
                           style: const TextStyle(
-                              fontFamily: 'your-writing-thin',
+                              fontFamily: 'your-writing-25',
                               fontSize: 30,
                               fontWeight: FontWeight.w600),
                           decoration: const InputDecoration(
@@ -269,7 +269,7 @@ class WritingScreenState extends State<WritingScreen> {
                           controller: _textEditingController,
                           onChanged: (value) {},
                           style: TextStyle(
-                              fontFamily: 'your-writing-thin',
+                              fontFamily: 'your-writing-25',
                               fontSize: textSize,
                               height: 1.5,
                               fontWeight: FontWeight.w400),

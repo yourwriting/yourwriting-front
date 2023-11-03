@@ -34,10 +34,10 @@ class GeneratorScreen extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: IconButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute<void>(
-                              builder: (BuildContext context) {
-                            return const HomeScreen();
-                          }));
+                          // Navigator.push(context, MaterialPageRoute<void>(
+                          //     builder: (BuildContext context) {
+                          //   return const HomeScreen();
+                          // }));
                         },
                         iconSize: 31,
                         icon: const Icon(Icons.arrow_back_ios),
@@ -345,11 +345,12 @@ class _DrawingSessionState extends State<DrawingSession> {
                         // await concatImages();
                         // await createfont();
                         // await loadFont();
-                        Navigator.push(context, MaterialPageRoute<void>(
-                          builder: (BuildContext context) {
-                            return const HomeScreen();
-                          },
-                        ));
+                        // Navigator.push(context, MaterialPageRoute<void>(
+                        //   builder: (BuildContext context) {
+                        //     return const HomeScreen();
+                        //   },
+                        // )
+                        //);
                       });
                       //uploadImages();
                     } else {

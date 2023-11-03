@@ -51,22 +51,25 @@ Future<void> loadSavedFont() async {
 }
 
 class HomeScreen extends StatefulWidget {
+  final String accessToken;
   final int? noteId;
-  const HomeScreen({Key? key, this.noteId}) : super(key: key);
+  const HomeScreen({Key? key, this.noteId, required this.accessToken})
+      : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String accessToken =
-      "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
+  late String accessToken;
+  //"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
   late Future<List<Note>> futureNotes;
 
   @override
   void initState() {
     super.initState();
     futureNotes = fetchNotes();
+    accessToken = widget.accessToken;
     loadSavedFont();
   }
 
