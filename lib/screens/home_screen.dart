@@ -68,8 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    futureNotes = fetchNotes();
     accessToken = widget.accessToken;
+    futureNotes = fetchNotes();
     loadSavedFont();
   }
 
@@ -150,7 +150,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute<void>(
                               builder: (BuildContext context) {
-                            return const GeneratorScreen();
+                            return GeneratorScreen(
+                              accessToken: accessToken,
+                            );
                           }));
                         },
                         style: ElevatedButton.styleFrom(
@@ -229,7 +231,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Navigator.push(context,
                                       MaterialPageRoute<void>(
                                     builder: (BuildContext context) {
-                                      return WritingScreen(noteId: newNoteId);
+                                      return WritingScreen(
+                                        noteId: newNoteId,
+                                        accessToken: accessToken,
+                                      );
                                     },
                                   ));
                                 });
@@ -258,6 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     date: note.createdAt,
                                     title: note.title,
                                     noteId: note.noteId,
+                                    accessToken: accessToken,
                                     onDelete: () {
                                       setState(() {
                                         futureNotes = fetchNotes();

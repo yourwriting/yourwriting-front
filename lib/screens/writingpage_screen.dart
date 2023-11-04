@@ -10,9 +10,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
 
 class WritingScreen extends StatefulWidget {
+  final String accessToken;
   final int? noteId;
   final String? date;
-  const WritingScreen({Key? key, this.noteId, this.date}) : super(key: key);
+  const WritingScreen(
+      {Key? key, this.noteId, this.date, required this.accessToken})
+      : super(key: key);
 
   @override
   WritingScreenState createState() => WritingScreenState();
@@ -21,8 +24,8 @@ class WritingScreen extends StatefulWidget {
 class WritingScreenState extends State<WritingScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   final TextEditingController _titleEditingController = TextEditingController();
-  String accessToken =
-      "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
+  late String accessToken;
+  // "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
   double textSize = 23.0;
 
   Future<String> fetchContent() async {
@@ -101,8 +104,8 @@ class WritingScreenState extends State<WritingScreen> {
   @override
   void initState() {
     super.initState();
+    accessToken = widget.accessToken;
     loadSavedFont();
-
     fetchTitle().then((title) {
       _titleEditingController.text = title;
     });
@@ -134,10 +137,12 @@ class WritingScreenState extends State<WritingScreen> {
               children: [
                 IconButton(
                   onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute<void>(
-                    //     builder: (BuildContext context) {
-                    //   return const HomeScreen();
-                    // }));
+                    Navigator.push(context, MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                      return HomeScreen(
+                        accessToken: accessToken,
+                      );
+                    }));
                   },
                   iconSize: 31,
                   icon: const Icon(Icons.arrow_back_ios),

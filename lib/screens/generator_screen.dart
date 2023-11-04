@@ -14,7 +14,9 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 
 class GeneratorScreen extends StatelessWidget {
-  const GeneratorScreen({Key? key}) : super(key: key);
+  final String accessToken;
+  const GeneratorScreen({Key? key, required this.accessToken})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +36,25 @@ class GeneratorScreen extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: IconButton(
                         onPressed: () {
-                          // Navigator.push(context, MaterialPageRoute<void>(
-                          //     builder: (BuildContext context) {
-                          //   return const HomeScreen();
-                          // }));
+                          Navigator.push(context, MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                            return HomeScreen(
+                              accessToken: accessToken,
+                            );
+                          }));
                         },
                         iconSize: 31,
                         icon: const Icon(Icons.arrow_back_ios),
                       ),
                     ),
                   ),
-                  const Column(
+                  Column(
                     children: [
-                      SizedBox(height: 190),
+                      const SizedBox(height: 190),
                       Center(
-                        child: DrawingSession(),
+                        child: DrawingSession(
+                          accessToken: accessToken,
+                        ),
                       ),
                     ],
                   ),
@@ -63,15 +69,16 @@ class GeneratorScreen extends StatelessWidget {
 }
 
 class DrawingSession extends StatefulWidget {
-  const DrawingSession({Key? key}) : super(key: key);
+  final String accessToken;
+  const DrawingSession({Key? key, required this.accessToken}) : super(key: key);
 
   @override
   _DrawingSessionState createState() => _DrawingSessionState();
 }
 
 class _DrawingSessionState extends State<DrawingSession> {
-  String accessToken =
-      "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
+  late String accessToken = widget.accessToken;
+  //"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
   List<Uint8List> images = []; // 각각의 그림에 대한 이미지 데이터를 저장할 리스트
   List<String> nowJamo = [
     "ㄱ",

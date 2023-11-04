@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                HomeScreen(accessToken: accessToken),
+                                HomeScreen(accessToken: "Bearer $accessToken"),
                           ),
                         );
                       } catch (e) {

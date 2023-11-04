@@ -10,6 +10,7 @@ class WrittenBook extends StatefulWidget {
   final int noteId;
   final String title;
   final VoidCallback onDelete;
+  final String accessToken;
 
   const WrittenBook({
     Key? key,
@@ -17,6 +18,7 @@ class WrittenBook extends StatefulWidget {
     required this.noteId,
     required this.title,
     required this.onDelete,
+    required this.accessToken,
   }) : super(key: key);
 
   @override
@@ -24,8 +26,8 @@ class WrittenBook extends StatefulWidget {
 }
 
 class _WrittenBookState extends State<WrittenBook> {
-  String accessToken =
-      "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
+  late String accessToken = widget.accessToken;
+  //"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +101,7 @@ class _WrittenBookState extends State<WrittenBook> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => WritingScreen(
+                                  accessToken: accessToken,
                                   noteId: widget.noteId,
                                   date: widget.date,
                                 )));
