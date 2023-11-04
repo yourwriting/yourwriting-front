@@ -29,23 +29,10 @@ class _LandingScreenState extends State<LandingScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'your',
-                style: TextStyle(
-                  color: ColorStyles.mainblack,
-                  fontSize: 35,
-                  fontFamily: "SF-Pro-Display-Regular",
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Text(
-                'writing',
-                style: TextStyle(
-                  color: ColorStyles.mainblack,
-                  fontSize: 35,
-                  fontFamily: "SF-Pro-Display-Regular",
-                ),
-              ),
+              Image(
+                image: AssetImage('assets/images/realwriting.png'),
+                width: 178,
+              )
             ],
           ),
         ),

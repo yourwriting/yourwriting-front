@@ -71,6 +71,12 @@ flutter:
     - family: Pretendard-Regular
       fonts:
         - asset: assets/fonts/Pretendard-Regular.otf
+    - family: SF-Pro-Rounded-Semibold
+      fonts:
+        - asset: assets/fonts/SF-Pro-Rounded-Semibold.otf
+    - family: SF-Pro-Rounded-Regular
+      fonts:
+        - asset: assets/fonts/SF-Pro-Rounded-Regular.otf
     - family: SF-Pro-Rounded-Thin
       fonts:
         - asset: assets/fonts/SF-Pro-Rounded-Thin.otf
@@ -95,6 +101,10 @@ flutter:
     - family: your-writing-25
       fonts:
         - asset: assets/fonts/font6.ttf
+
+  assets:
+    - assets/images/realwriting.png
+    - assets/images/login.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
