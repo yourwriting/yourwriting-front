@@ -49,124 +49,137 @@ class _LoginScreenState extends State<LoginScreen> {
           key: _formKey,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Image(
-                  image: AssetImage('assets/images/realwriting.png'),
-                  width: 178,
-                ),
-                const SizedBox(
-                  height: 72,
-                ),
-                const Text(
-                  'ID',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                      color: ColorStyles.mainblack,
-                      fontSize: 18,
-                      fontFamily: "SF-Pro-Rounded-Semibold"),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _loginIdController,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your Id',
-                    hintStyle: TextStyle(
-                      fontSize: 15,
-                      fontFamily: "SF-Pro-Rounded-Regular",
-                    ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 37,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Image(
+                    image: AssetImage('assets/images/realwriting.png'),
+                    width: 178,
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your ID';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 36,
-                ),
-                const Text(
-                  'Password',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                      color: ColorStyles.mainblack,
-                      fontSize: 18,
-                      fontFamily: "SF-Pro-Rounded-Semibold"),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your password',
-                    hintStyle: TextStyle(
-                      fontSize: 15,
-                      fontFamily: "SF-Pro-Rounded-Regular",
-                    ),
+                  const SizedBox(
+                    height: 72,
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    return null;
-                  },
-                ),
-                // ElevatedButton(
-                //   onPressed: () async {
-                //     if (_formKey.currentState!.validate()) {
-                //       try {
-                //         String accessToken = await login(
-                //             _loginIdController.text, _passwordController.text);
-                //         print('Access token: $accessToken');
-                //         Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) =>
-                //                 HomeScreen(accessToken: "Bearer $accessToken"),
-                //           ),
-                //         );
-                //       } catch (e) {
-                //         print('Failed to login: $e');
-                //       }
-                //     }
-                //   },
-                //   child: const Text('Submit'),
-                // ),
-                const SizedBox(
-                  height: 70,
-                ),
-                InkWell(
-                    onTap: () async {
-                      if (_formKey.currentState!.validate()) {
-                        try {
-                          String accessToken = await login(
-                            _loginIdController.text,
-                            _passwordController.text,
-                          );
-                          print('Access token: $accessToken');
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(
-                                  accessToken: "Bearer $accessToken"),
-                            ),
-                          );
-                        } catch (e) {
-                          print('Failed to login: $e');
-                        }
+                  const Row(
+                    children: [
+                      Text(
+                        'ID',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: ColorStyles.mainblack,
+                            fontSize: 18,
+                            fontFamily: "SF-Pro-Rounded-Semibold"),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  TextFormField(
+                    controller: _loginIdController,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your ID',
+                      hintStyle: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "SF-Pro-Rounded-Regular",
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your ID';
                       }
+                      return null;
                     },
-                    child: const Image(
-                      image: AssetImage('assets/images/login.png'),
-                      width: 327,
-                    ))
-              ],
+                  ),
+                  const SizedBox(
+                    height: 36,
+                  ),
+                  const Row(
+                    children: [
+                      Text(
+                        'Password',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: ColorStyles.mainblack,
+                            fontSize: 18,
+                            fontFamily: "SF-Pro-Rounded-Semibold"),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your password',
+                      hintStyle: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "SF-Pro-Rounded-Regular",
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 52,
+                  ),
+                  InkWell(
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            String accessToken = await login(
+                              _loginIdController.text,
+                              _passwordController.text,
+                            );
+                            print('Access token: $accessToken');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(
+                                    accessToken: "Bearer $accessToken"),
+                              ),
+                            );
+                          } catch (e) {
+                            print('Failed to login: $e');
+                          }
+                        }
+                      },
+                      child: const Image(
+                        image: AssetImage('assets/images/login.png'),
+                        width: 327,
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Row(
+                    children: [
+                      Text(
+                        'Don’t have an account yet? Register ',
+                        style: TextStyle(
+                            fontFamily: "SF-Pro-Display-Regular",
+                            color: ColorStyles.mainblack,
+                            fontSize: 16),
+                      ),
+                      Text(
+                        'here',
+                        style: TextStyle(
+                            fontFamily: "SF-Pro-Display-Regular",
+                            color: ColorStyles.blue,
+                            fontSize: 16),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

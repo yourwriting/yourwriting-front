@@ -22,7 +22,7 @@ class GeneratorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: ColorStyles.mainbackground,
+        backgroundColor: ColorStyles.subbackground,
         body: Center(
           child: Column(
             children: [
@@ -137,7 +137,7 @@ class _DrawingSessionState extends State<DrawingSession> {
 
   Future<void> uploadImages() async {
     var url = Uri.parse(
-        'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:5000/font/upload');
+        'http://ec2-43-202-176-82.ap-northeast-2.compute.amazonaws.com:5000/font/upload');
     //'http://127.0.0.1:5000/upload');
     var request = http.MultipartRequest('POST', url);
 
@@ -181,7 +181,7 @@ class _DrawingSessionState extends State<DrawingSession> {
 
   Future<void> combineImages() async {
     String urlString =
-        'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:5000/font/combine';
+        'http://ec2-43-202-176-82.ap-northeast-2.compute.amazonaws.com:5000/font/combine';
     //'http://127.0.0.1:5000/upload');
 
     Uri uri = Uri.parse(urlString);
@@ -198,7 +198,7 @@ class _DrawingSessionState extends State<DrawingSession> {
 
   Future<void> concatImages() async {
     String urlString =
-        'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:5000/font/concat';
+        'http://ec2-43-202-176-82.ap-northeast-2.compute.amazonaws.com:5000/font/concat';
     //'http://127.0.0.1:5000/upload');
 
     Uri uri = Uri.parse(urlString);
@@ -213,29 +213,29 @@ class _DrawingSessionState extends State<DrawingSession> {
     }
   }
 
-  Future<void> createfont() async {
-    String urlString =
-        'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:5000/font/create';
-    //'http://127.0.0.1:5000/upload');
+  // Future<void> createfont() async {
+  //   String urlString =
+  //       'http://ec2-43-202-176-82.ap-northeast-2.compute.amazonaws.com:5000/font/create';
+  //   //'http://127.0.0.1:5000/upload');
 
-    Uri uri = Uri.parse(urlString);
-    final response = await http.get(
-      uri,
-    );
+  //   Uri uri = Uri.parse(urlString);
+  //   final response = await http.get(
+  //     uri,
+  //   );
 
-    if (response.statusCode == 200) {
-      print("Success");
-    } else {
-      throw Exception('Failed to load notes');
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     print("Success");
+  //   } else {
+  //     throw Exception('Failed to load notes');
+  //   }
+  // }
 
   Future<void> loadFont() async {
     var httpClient = http.Client();
     var request = http.Request(
         'GET',
         Uri.parse(
-            'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:5000/font/create'));
+            'http://ec2-43-202-176-82.ap-northeast-2.compute.amazonaws.com:5000/font/create'));
     //'http://127.0.0.1:5000/create'));
 
     var response = await httpClient.send(request);
@@ -348,13 +348,13 @@ class _DrawingSessionState extends State<DrawingSession> {
                       ).then((_) async {
                         // After closing the dialog
                         await uploadImages();
-                        // await combineImages();
+                        //await combineImages();
                         // await concatImages();
                         // await createfont();
                         // await loadFont();
                         // Navigator.push(context, MaterialPageRoute<void>(
                         //   builder: (BuildContext context) {
-                        //     return const HomeScreen();
+                        //     return const HomeScreen(accessToken: accessToken,);
                         //   },
                         // )
                         //);
@@ -386,34 +386,34 @@ class _DrawingSessionState extends State<DrawingSession> {
                         fontSize: 16),
                   ),
                 ),
-                // Column(
-                //   children: [
-                //     ElevatedButton(
-                //       onPressed: () async {
-                //         await combineImages();
-                //       },
-                //       child: const Text('Combine Images'),
-                //     ),
-                //     ElevatedButton(
-                //       onPressed: () async {
-                //         await concatImages();
-                //       },
-                //       child: const Text('Concat Images'),
-                //     ),
-                //     ElevatedButton(
-                //       onPressed: () async {
-                //         await createfont();
-                //       },
-                //       child: const Text('Create Font'),
-                //     ),
-                //     ElevatedButton(
-                //       onPressed: () async {
-                //         await loadFont();
-                //       },
-                //       child: const Text('Load Font'),
-                //     ),
-                //   ],
-                // )
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        await combineImages();
+                      },
+                      child: const Text('Combine Images'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await concatImages();
+                      },
+                      child: const Text('Concat Images'),
+                    ),
+                    // ElevatedButton(
+                    //   onPressed: () async {
+                    //     await createfont();
+                    //   },
+                    //   child: const Text('Create Font'),
+                    //),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await loadFont();
+                      },
+                      child: const Text('Load Font'),
+                    ),
+                  ],
+                )
               ],
             )
           ],

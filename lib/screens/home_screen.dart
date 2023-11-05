@@ -124,11 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
     DateTime now = DateTime.now();
     String formattedMonth = now.month.toString().padLeft(2, '0');
     String formattedDay = now.day.toString().padLeft(2, '0');
-    String formattedDate = "${now.year}-$formattedMonth-$formattedDay";
+    String formattedDate = "${now.year}/$formattedMonth/$formattedDay";
 
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: ColorStyles.mainbackground,
+        backgroundColor: ColorStyles.subbackground,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(

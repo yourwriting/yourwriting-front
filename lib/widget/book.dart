@@ -83,19 +83,23 @@ class _WrittenBookState extends State<WrittenBook> {
           );
         },
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                      color: ColorStyles.mainshadow.withOpacity(0.5),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2))
+                      color: ColorStyles.mainshadow.withOpacity(0.1),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1))
                 ],
               ),
-              child: ElevatedButton(
+              child: SizedBox(
+                width: 343,
+                height: 70,
+                child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -113,35 +117,44 @@ class _WrittenBookState extends State<WrittenBook> {
                         borderRadius: BorderRadius.circular(15)),
                     textStyle: const TextStyle(fontSize: 14),
                     padding: const EdgeInsets.symmetric(
-                        vertical: 65, horizontal: 25),
+                        vertical: 19, horizontal: 16),
                   ),
-                  child: Center(
-                      child: Column(children: [
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "PretendardVariable",
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    Text(
-                      widget.date,
-                      style: const TextStyle(
-                        fontFamily: "PretendardVariable",
-                        color: Colors.black,
-                        fontSize: 13,
-                      ),
-                      textAlign: TextAlign.center,
-                    )
-                  ]))),
+                  child: Align(
+                    // Align 위젯 추가
+                    alignment: Alignment.centerLeft, // 좌측 정렬 설정
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.date,
+                            style: const TextStyle(
+                              fontFamily: "PretendardVariable",
+                              color: ColorStyles.dateColor,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          const SizedBox(
+                            height: 1,
+                          ),
+                          Text(
+                            widget.title,
+                            style: const TextStyle(
+                              color: ColorStyles.mainblack,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: "PretendardVariable",
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ]),
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 10), // Add SizedBox here
+
+            const SizedBox(height: 11), // Add SizedBox here
           ],
         ));
   }
