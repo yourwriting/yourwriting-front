@@ -26,7 +26,7 @@ class WritingScreenState extends State<WritingScreen> {
   final TextEditingController _titleEditingController = TextEditingController();
   late String accessToken;
   // "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
-  double textSize = 23.0;
+  double textSize = 20.0;
 
   Future<String> fetchContent() async {
     String urlString =
@@ -129,14 +129,14 @@ class WritingScreenState extends State<WritingScreen> {
     return Scaffold(
       backgroundColor: ColorStyles.mainbackground,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 10),
         child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     Navigator.push(context, MaterialPageRoute<void>(
                         builder: (BuildContext context) {
                       return HomeScreen(
@@ -144,8 +144,22 @@ class WritingScreenState extends State<WritingScreen> {
                       );
                     }));
                   },
-                  iconSize: 31,
-                  icon: const Icon(Icons.arrow_back_ios),
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: ColorStyles.blue,
+                        size: 30,
+                      ),
+                      Text(
+                        'Home',
+                        style: TextStyle(
+                            fontFamily: 'SF-Pro-Display-Regular',
+                            fontSize: 18,
+                            color: ColorStyles.blue),
+                      )
+                    ],
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -172,127 +186,134 @@ class WritingScreenState extends State<WritingScreen> {
                     }),
                   ),
                   child: const Text(
-                    '완료',
+                    'Done',
                     style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "Pretendard-Regular",
+                      color: ColorStyles.blue,
+                      fontFamily: "SF-Pro-Display-Regular",
+                      fontSize: 18,
                     ),
                   ),
                 )
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Column(
                     children: [
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            widget.date != null
-                                ? '${widget.date}'
-                                : formattedDate,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontFamily: "Pretendard-Regular",
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
+                      // Row(
+                      //   children: [
+                      //     const SizedBox(
+                      //       width: 10,
+                      //     ),
+                      //     Text(
+                      //       widget.date != null
+                      //           ? '${widget.date}'
+                      //           : formattedDate,
+                      //       style: const TextStyle(
+                      //         fontSize: 18,
+                      //         fontFamily: "Pretendard-Regular",
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      SizedBox(
                         height: 8,
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      PopupMenuButton<double>(
-                        icon: const Icon(
-                          Icons.text_fields_outlined,
-                          size: 30,
-                        ),
-                        itemBuilder: (BuildContext context) =>
-                            textSizeOptions.map((double value) {
-                          return PopupMenuItem<double>(
-                            value: value,
-                            child: Text(value.toString()),
-                          );
-                        }).toList(),
-                        onSelected: (double newValue) {
-                          setState(() {
-                            textSize = newValue;
-                          });
-                        },
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.color_lens_outlined,
-                          size: 30,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.image_outlined,
-                          size: 30,
-                        ),
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: FutureBuilder<String>(
-                  future: fetchContent(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    if (snapshot.hasData) {
-                      return Column(children: [
-                        TextField(
-                          // 제목 입력 필드 추가
-                          controller: _titleEditingController,
-                          style: const TextStyle(
-                              fontFamily: 'your-writing-25',
-                              fontSize: 30,
-                              fontWeight: FontWeight.w600),
-                          decoration: const InputDecoration(
-                              hintText: '제목을 적어보세요', border: InputBorder.none),
-                          textAlign: TextAlign.center,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+              child: FutureBuilder<String>(
+                future: fetchContent(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(children: [
+                      TextField(
+                        // 제목 입력 필드 추가
+                        controller: _titleEditingController,
+                        style: const TextStyle(
+                            fontFamily: 'your-writing-25',
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600),
+                        decoration: const InputDecoration(
+                            hintText: '제목을 적어보세요', border: InputBorder.none),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 34,
+                      ),
+                      // ConstrainedBox(
+                      //   constraints:
+                      //       const BoxConstraints(maxHeight: 550), // 높이 제한 설정
+                      SizedBox(
+                        height: 550,
+                        child: SingleChildScrollView(
+                          child: TextField(
+                            focusNode: focusNode,
+                            controller: _textEditingController,
+                            onChanged: (value) {},
+                            style: TextStyle(
+                                fontFamily: 'your-writing-25',
+                                fontSize: textSize,
+                                height: 1.25,
+                                fontWeight: FontWeight.w400),
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                                hintText: '오늘의 글을 적어보세요.',
+                                border: InputBorder.none),
+                          ),
                         ),
-                        TextField(
-                          focusNode: focusNode,
-                          controller: _textEditingController,
-                          onChanged: (value) {},
-                          style: TextStyle(
-                              fontFamily: 'your-writing-25',
-                              fontSize: textSize,
-                              height: 1.5,
-                              fontWeight: FontWeight.w400),
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                              hintText: '오늘의 글을 적어보세요.',
-                              border: InputBorder.none),
-                        ),
-                      ]);
-                    } else if (snapshot.hasError) {
-                      return const Text('Error occurred');
-                    }
-                    // By default, show a loading spinner.
-                    return const CircularProgressIndicator();
-                  },
-                ),
+                      ),
+                    ]);
+                  } else if (snapshot.hasError) {
+                    return const Text('Error occurred');
+                  }
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                PopupMenuButton<double>(
+                  icon: const Icon(
+                    Icons.text_fields_outlined,
+                    size: 30,
+                  ),
+                  itemBuilder: (BuildContext context) =>
+                      textSizeOptions.map((double value) {
+                    return PopupMenuItem<double>(
+                      value: value,
+                      child: Text(value.toString()),
+                    );
+                  }).toList(),
+                  onSelected: (double newValue) {
+                    setState(() {
+                      textSize = newValue;
+                    });
+                  },
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.image_outlined,
+                    size: 30,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                )
+              ],
+            )
           ],
         ),
       ),

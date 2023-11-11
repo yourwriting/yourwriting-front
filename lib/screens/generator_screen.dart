@@ -31,20 +31,29 @@ class GeneratorScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 20),
+                        vertical: 15, horizontal: 10),
                     child: Align(
                       alignment: Alignment.topLeft,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute<void>(
-                              builder: (BuildContext context) {
-                            return HomeScreen(
-                              accessToken: accessToken,
-                            );
-                          }));
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
                         },
-                        iconSize: 31,
-                        icon: const Icon(Icons.arrow_back_ios),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.arrow_back_ios_new_rounded,
+                              color: ColorStyles.blue,
+                              size: 30,
+                            ),
+                            Text(
+                              'Home',
+                              style: TextStyle(
+                                  fontFamily: 'SF-Pro-Display-Regular',
+                                  fontSize: 17,
+                                  color: ColorStyles.blue),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
