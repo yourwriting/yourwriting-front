@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:realwriting/screens/home_screen.dart';
 import 'package:realwriting/style.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +9,7 @@ import 'dart:core';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
+import 'package:http_parser/http_parser.dart';
 
 class WritingScreen extends StatefulWidget {
   final String accessToken;
@@ -27,6 +29,7 @@ class WritingScreenState extends State<WritingScreen> {
   late String accessToken;
   // "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
   double textSize = 20.0;
+  String? imagePath;
 
   Future<String> fetchContent() async {
     String urlString =
@@ -48,24 +51,64 @@ class WritingScreenState extends State<WritingScreen> {
     }
   }
 
-  Future<void> updateContent(String newTitle, String newContent) async {
+  // Future<void> updateContent(String newTitle, String newContent) async {
+  //   String urlString =
+  //       "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note/${widget.noteId}";
+  //   Uri uri = Uri.parse(urlString);
+
+  //   final response = await http.put(
+  //     uri,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': accessToken,
+  //     },
+  //     body: jsonEncode({'title': newTitle, 'content': newContent}),
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     print('데이터가 성공적으로 수정되었습니다.');
+  //   } else {
+  //     print('데이터 수정에 실패했습니다.');
+  //   }
+  // }
+
+  Future<void> updateContent(String newTitle, String newContent,
+      [String? imagePath]) async {
     String urlString =
         "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note/${widget.noteId}";
     Uri uri = Uri.parse(urlString);
 
-    final response = await http.put(
+    var request = http.MultipartRequest(
+      'PUT',
       uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': accessToken,
-      }, // Add this line
-      body: jsonEncode({'title': newTitle, 'content': newContent}),
     );
+    request.headers.addAll(<String, String>{
+      'Authorization': accessToken,
+      'Content-Type': 'application/json',
+    });
+
+    // request.fields['input'] =
+    //     jsonEncode({'title': newTitle, 'content': newContent});
+    request.files.add(http.MultipartFile.fromString(
+      'input',
+      jsonEncode({'title': newTitle, 'content': newContent}),
+      contentType: MediaType('application', 'json'),
+    ));
+
+    if (imagePath != null) {
+      // 이미지가 제공되었을 경우, 이미지를 요청에 추가합니다.
+      request.files.add(await http.MultipartFile.fromPath(
+        'file',
+        imagePath,
+      ));
+    }
+
+    var response = await request.send();
 
     if (response.statusCode == 200) {
-      developer.log('데이터가 성공적으로 수정되었습니다.');
+      print('데이터가 성공적으로 수정되었습니다.');
     } else {
-      developer.log('데이터 수정에 실패했습니다.');
+      print('데이터 수정에 실패했습니다.');
     }
   }
 
@@ -124,7 +167,7 @@ class WritingScreenState extends State<WritingScreen> {
     String formattedDate = "${now.year}-$formattedMonth-$formattedDay";
 
     final FocusNode focusNode = FocusNode();
-    List<double> textSizeOptions = [24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0];
+    List<double> textSizeOptions = [20.0, 21.0, 22.0, 23.0, 24.0, 25.0];
 
     return Scaffold(
       backgroundColor: ColorStyles.mainbackground,
@@ -164,8 +207,15 @@ class WritingScreenState extends State<WritingScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     try {
-                      await updateContent(_titleEditingController.text,
-                          _textEditingController.text);
+                      if (imagePath != null) {
+                        // Done 버튼을 눌렀을 때, imagePath 변수에 저장된 이미지를 업로드합니다.
+                        await updateContent(_titleEditingController.text,
+                            _textEditingController.text, imagePath);
+                      } else {
+                        print("지금은$imagePath");
+                        await updateContent(_titleEditingController.text,
+                            _textEditingController.text);
+                      }
                       focusNode.unfocus();
                     } catch (e) {
                       // 에러 처리 로직
@@ -248,28 +298,36 @@ class WritingScreenState extends State<WritingScreen> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
-                        height: 34,
+                        height: 20,
                       ),
                       // ConstrainedBox(
                       //   constraints:
                       //       const BoxConstraints(maxHeight: 550), // 높이 제한 설정
                       SizedBox(
-                        height: 550,
+                        height: 450, //525,
                         child: SingleChildScrollView(
-                          child: TextField(
-                            focusNode: focusNode,
-                            controller: _textEditingController,
-                            onChanged: (value) {},
-                            style: TextStyle(
-                                fontFamily: 'your-writing-25',
-                                fontSize: textSize,
-                                height: 1.25,
-                                fontWeight: FontWeight.w400),
-                            maxLines: null,
-                            decoration: const InputDecoration(
-                                hintText: '오늘의 글을 적어보세요.',
-                                border: InputBorder.none),
-                          ),
+                          child: Column(children: [
+                            TextField(
+                              focusNode: focusNode,
+                              controller: _textEditingController,
+                              onChanged: (value) {},
+                              style: TextStyle(
+                                  fontFamily: 'your-writing-25',
+                                  fontSize: textSize,
+                                  height: 1.25,
+                                  fontWeight: FontWeight.w400),
+                              maxLines: null,
+                              decoration: const InputDecoration(
+                                  hintText: '오늘의 글을 적어보세요.',
+                                  border: InputBorder.none),
+                            ),
+                            imagePath != null
+                                ? Image.file(
+                                    File(imagePath!),
+                                    // 이미지 크기 등을 설정하려면 여기에 추가하면 됩니다.
+                                  )
+                                : Container(),
+                          ]),
                         ),
                       ),
                     ]);
@@ -303,7 +361,18 @@ class WritingScreenState extends State<WritingScreen> {
                   },
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final picker = ImagePicker();
+                    final pickedFile =
+                        await picker.pickImage(source: ImageSource.gallery);
+
+                    if (pickedFile != null) {
+                      // 이미지가 선택되었을 때, 이미지의 경로를 imagePath 변수에 저장합니다.
+                      setState(() {
+                        imagePath = pickedFile.path;
+                      });
+                    }
+                  },
                   icon: const Icon(
                     Icons.image_outlined,
                     size: 30,
