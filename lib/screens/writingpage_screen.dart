@@ -308,7 +308,7 @@ class WritingScreenState extends State<WritingScreen> {
                       //   constraints:
                       //       const BoxConstraints(maxHeight: 550), // 높이 제한 설정
                       SizedBox(
-                        height: 450, //525,
+                        height: 525, //450,
                         child: SingleChildScrollView(
                           child: Column(children: [
                             TextField(
