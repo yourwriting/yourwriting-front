@@ -33,7 +33,7 @@ dependencies:
   intl: ^0.17.0
   http: ^1.1.0
   path_provider: ^2.0.5
-  image_picker: ^0.8.4+2
+  image_picker: 
   http_parser: any
 
   

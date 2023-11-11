@@ -51,27 +51,6 @@ class WritingScreenState extends State<WritingScreen> {
     }
   }
 
-  // Future<void> updateContent(String newTitle, String newContent) async {
-  //   String urlString =
-  //       "http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/note/${widget.noteId}";
-  //   Uri uri = Uri.parse(urlString);
-
-  //   final response = await http.put(
-  //     uri,
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json',
-  //       'Authorization': accessToken,
-  //     },
-  //     body: jsonEncode({'title': newTitle, 'content': newContent}),
-  //   );
-
-  //   if (response.statusCode == 200) {
-  //     print('데이터가 성공적으로 수정되었습니다.');
-  //   } else {
-  //     print('데이터 수정에 실패했습니다.');
-  //   }
-  // }
-
   Future<void> updateContent(String newTitle, String newContent,
       [String? imagePath]) async {
     String urlString =
@@ -84,7 +63,6 @@ class WritingScreenState extends State<WritingScreen> {
     );
     request.headers.addAll(<String, String>{
       'Authorization': accessToken,
-      'Content-Type': 'application/json',
     });
 
     // request.fields['input'] =
@@ -96,15 +74,26 @@ class WritingScreenState extends State<WritingScreen> {
     ));
 
     if (imagePath != null) {
+      print("imagePath: $imagePath");
       // 이미지가 제공되었을 경우, 이미지를 요청에 추가합니다.
-      request.files.add(await http.MultipartFile.fromPath(
-        'file',
-        imagePath,
-      ));
+      // request.files.add(await http.MultipartFile.fromPath(
+      //   'files',
+      //   imagePath,
+      // ));
+      try {
+        var multipartFile = await http.MultipartFile.fromPath(
+          'files',
+          imagePath,
+        );
+        print('MultipartFile created successfully: $multipartFile');
+        request.files.add(multipartFile);
+      } catch (e) {
+        print('Failed to create MultipartFile: $e');
+      }
     }
 
     var response = await request.send();
-
+    print('Request sent successfully: ${response.statusCode}');
     if (response.statusCode == 200) {
       print('데이터가 성공적으로 수정되었습니다.');
     } else {
@@ -212,7 +201,6 @@ class WritingScreenState extends State<WritingScreen> {
                         await updateContent(_titleEditingController.text,
                             _textEditingController.text, imagePath);
                       } else {
-                        print("지금은$imagePath");
                         await updateContent(_titleEditingController.text,
                             _textEditingController.text);
                       }
