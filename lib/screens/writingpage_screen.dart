@@ -30,6 +30,7 @@ class WritingScreenState extends State<WritingScreen> {
   // "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
   double textSize = 20.0;
   String? imagePath;
+  String? imageUrl;
 
   Future<String> fetchContent() async {
     String urlString =
@@ -44,7 +45,16 @@ class WritingScreenState extends State<WritingScreen> {
     );
 
     if (response.statusCode == 200) {
+      //   var jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
+      //   return jsonResponse['result']['content'];
+      // } else {
+      //   throw Exception('Failed to load content');
+      // }
       var jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
+      if (jsonResponse['result']['fileResList'].isNotEmpty) {
+        // 이미지 URL 저장
+        imageUrl = jsonResponse['result']['fileResList'][0]['fileUrl'];
+      }
       return jsonResponse['result']['content'];
     } else {
       throw Exception('Failed to load content');
@@ -75,7 +85,7 @@ class WritingScreenState extends State<WritingScreen> {
 
     if (imagePath != null) {
       print("imagePath: $imagePath");
-      // 이미지가 제공되었을 경우, 이미지를 요청에 추가합니다.
+      //이미지가 제공되었을 경우, 이미지를 요청에 추가합니다.
       // request.files.add(await http.MultipartFile.fromPath(
       //   'files',
       //   imagePath,
@@ -89,6 +99,12 @@ class WritingScreenState extends State<WritingScreen> {
         request.files.add(multipartFile);
       } catch (e) {
         print('Failed to create MultipartFile: $e');
+      }
+      final imageFile = File(imagePath);
+      if (imageFile.existsSync()) {
+        print('파일이 존재합니다.');
+      } else {
+        print('파일이 존재하지 않습니다.');
       }
     }
 
@@ -314,7 +330,9 @@ class WritingScreenState extends State<WritingScreen> {
                                     File(imagePath!),
                                     // 이미지 크기 등을 설정하려면 여기에 추가하면 됩니다.
                                   )
-                                : Container(),
+                                : imageUrl != null
+                                    ? Image.network(imageUrl!)
+                                    : Container()
                           ]),
                         ),
                       ),
