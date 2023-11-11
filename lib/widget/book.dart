@@ -126,7 +126,7 @@ class _WrittenBookState extends State<WrittenBook> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.date,
+                            widget.date.replaceAll("-", "/"),
                             style: const TextStyle(
                               fontFamily: "PretendardVariable",
                               color: ColorStyles.dateColor,

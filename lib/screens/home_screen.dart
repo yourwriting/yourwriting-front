@@ -62,7 +62,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late String accessToken;
-  //"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
   late Future<List<Note>> futureNotes;
 
   @override
@@ -179,32 +178,45 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 50,
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+                          const Text(
+                            '오늘은',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontFamily: "Pretendard-Regular",
+                              color: ColorStyles.dateColor,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
                           Text(
                             //date,
                             formattedDate,
                             style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 17,
+                                fontSize: 20,
                                 fontFamily: "Pretendard-Regular"),
                           ),
                           const SizedBox(
-                            height: 7,
+                            height: 4,
                           )
                         ],
                       ),
-                      const Column(
-                        children: [
-                          Icon(
-                            Icons.settings,
-                            size: 40,
-                            color: ColorStyles.mainblack,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                        ],
-                      ),
+                      // const Column(
+                      //   children: [
+                      //     Icon(
+                      //       Icons.settings,
+                      //       size: 40,
+                      //       color: ColorStyles.mainblack,
+                      //     ),
+                      //     SizedBox(
+                      //       height: 5,
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
@@ -214,15 +226,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Column(
                   children: [
                     SizedBox(
-                      width: 335,
-                      height: 160,
+                      width: 343,
+                      height: 70,
                       //새로운 파일 추가 버튼
                       child: DottedBorder(
-                          color: ColorStyles.mainblack.withOpacity(0.6),
-                          strokeWidth: 2,
-                          dashPattern: const [3, 4],
+                          color: ColorStyles.dots,
+                          strokeWidth: 1.5,
+                          dashPattern: const [2, 3],
                           borderType: BorderType.RRect,
-                          radius: const Radius.circular(20),
+                          radius: const Radius.circular(10),
                           strokeCap: StrokeCap.round,
                           child: Center(
                             child: IconButton(
@@ -239,7 +251,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ));
                                 });
                               },
-                              icon: const Icon(Icons.add),
+                              icon: const Icon(
+                                Icons.add,
+                                color: ColorStyles.dots,
+                              ),
                             ),
                           )),
                     ),
