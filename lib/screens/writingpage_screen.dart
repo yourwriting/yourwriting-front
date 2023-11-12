@@ -142,10 +142,13 @@ class WritingScreenState extends State<WritingScreen> {
     File fontFile = File('${appDocDir.path}/font.ttf');
 
     if (await fontFile.exists()) {
-      var fontLoader = FontLoader('MyFont');
+      print('Font uploading...');
+      var fontLoader = FontLoader('font');
       fontLoader.addFont(
           Future.value(ByteData.view(fontFile.readAsBytesSync().buffer)));
       await fontLoader.load();
+    } else {
+      print('Font file does not exist');
     }
   }
 
@@ -294,7 +297,7 @@ class WritingScreenState extends State<WritingScreen> {
                         // 제목 입력 필드 추가
                         controller: _titleEditingController,
                         style: const TextStyle(
-                            fontFamily: 'your-writing-25',
+                            fontFamily: 'font',
                             fontSize: 24,
                             fontWeight: FontWeight.w600),
                         decoration: const InputDecoration(
@@ -308,7 +311,7 @@ class WritingScreenState extends State<WritingScreen> {
                       //   constraints:
                       //       const BoxConstraints(maxHeight: 550), // 높이 제한 설정
                       SizedBox(
-                        height: 525, //450,
+                        height: 520,
                         child: SingleChildScrollView(
                           child: Column(children: [
                             TextField(
@@ -316,7 +319,7 @@ class WritingScreenState extends State<WritingScreen> {
                               controller: _textEditingController,
                               onChanged: (value) {},
                               style: TextStyle(
-                                  fontFamily: 'your-writing-25',
+                                  fontFamily: 'font',
                                   fontSize: textSize,
                                   height: 1.25,
                                   fontWeight: FontWeight.w400),

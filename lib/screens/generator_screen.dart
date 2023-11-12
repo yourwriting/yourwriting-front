@@ -199,9 +199,9 @@ class _DrawingSessionState extends State<DrawingSession> {
     );
 
     if (response.statusCode == 200) {
-      print("Success");
+      print("combine Success");
     } else {
-      throw Exception('Failed to load notes');
+      throw Exception('combine: Failed to load notes');
     }
   }
 
@@ -216,9 +216,9 @@ class _DrawingSessionState extends State<DrawingSession> {
     );
 
     if (response.statusCode == 200) {
-      print("Success");
+      print("concat Success");
     } else {
-      throw Exception('Failed to load notes');
+      throw Exception('concat Failed to load notes');
     }
   }
 
@@ -248,6 +248,12 @@ class _DrawingSessionState extends State<DrawingSession> {
     //'http://127.0.0.1:5000/create'));
 
     var response = await httpClient.send(request);
+
+    if (response.statusCode == 200) {
+      print("loadFont Success");
+    } else {
+      throw Exception('loadFont: Failed to load notes');
+    }
 
     Directory appDocDir = await getApplicationDocumentsDirectory();
     File fontFile = File('${appDocDir.path}/font.ttf');

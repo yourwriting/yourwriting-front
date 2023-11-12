@@ -43,10 +43,13 @@ Future<void> loadSavedFont() async {
   File fontFile = File('${appDocDir.path}/font.ttf');
 
   if (await fontFile.exists()) {
-    var fontLoader = FontLoader('MyFont');
+    print('Font uploading...');
+    var fontLoader = FontLoader('font');
     fontLoader.addFont(
         Future.value(ByteData.view(fontFile.readAsBytesSync().buffer)));
     await fontLoader.load();
+  } else {
+    print('Font file does not exist');
   }
 }
 
