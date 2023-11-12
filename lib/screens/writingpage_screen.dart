@@ -147,6 +147,7 @@ class WritingScreenState extends State<WritingScreen> {
       fontLoader.addFont(
           Future.value(ByteData.view(fontFile.readAsBytesSync().buffer)));
       await fontLoader.load();
+      print('Font loaded');
     } else {
       print('Font file does not exist');
     }

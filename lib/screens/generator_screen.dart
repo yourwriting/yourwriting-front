@@ -87,7 +87,6 @@ class DrawingSession extends StatefulWidget {
 
 class _DrawingSessionState extends State<DrawingSession> {
   late String accessToken = widget.accessToken;
-  //"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
   List<Uint8List> images = []; // 각각의 그림에 대한 이미지 데이터를 저장할 리스트
   List<String> nowJamo = [
     "ㄱ",
@@ -133,6 +132,7 @@ class _DrawingSessionState extends State<DrawingSession> {
   ];
   int currentStep = 0; // 현재 그리고 있는 글자의 인덱스
   final GlobalKey<_DrawingAreaState> _drawingAreaKey = GlobalKey();
+  bool isLoading = false;
 
   Future<void> captureImage(Uint8List imageBytes) async {
     // 이미지 파일 생성 (임시 파일)
@@ -222,24 +222,8 @@ class _DrawingSessionState extends State<DrawingSession> {
     }
   }
 
-  // Future<void> createfont() async {
-  //   String urlString =
-  //       'http://ec2-43-202-176-82.ap-northeast-2.compute.amazonaws.com:5000/font/create';
-  //   //'http://127.0.0.1:5000/upload');
-
-  //   Uri uri = Uri.parse(urlString);
-  //   final response = await http.get(
-  //     uri,
-  //   );
-
-  //   if (response.statusCode == 200) {
-  //     print("Success");
-  //   } else {
-  //     throw Exception('Failed to load notes');
-  //   }
-  // }
-
   Future<void> loadFont() async {
+    print("start loading");
     var httpClient = http.Client();
     var request = http.Request(
         'GET',
@@ -374,9 +358,17 @@ class _DrawingSessionState extends State<DrawingSession> {
                       child: const Text('Concat'),
                     ),
                     ElevatedButton(
-                      onPressed: () async {
-                        await loadFont();
-                      },
+                      onPressed: isLoading
+                          ? null
+                          : () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await loadFont();
+                              setState(() {
+                                isLoading = false;
+                              });
+                            },
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Colors.transparent),
