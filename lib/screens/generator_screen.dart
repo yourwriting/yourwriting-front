@@ -327,7 +327,75 @@ class _DrawingSessionState extends State<DrawingSession> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        await combineImages();
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          elevation: MaterialStateProperty.all(0),
+                          overlayColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Colors.grey.withOpacity(
+                                  0.3); // color when the button is pressed
+                            }
+                            return null;
+                          })),
+                      child: const Text('Combine'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await concatImages();
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          elevation: MaterialStateProperty.all(0),
+                          overlayColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Colors.grey.withOpacity(
+                                  0.3); // color when the button is pressed
+                            }
+                            return null;
+                          })),
+                      child: const Text('Concat'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await loadFont();
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          elevation: MaterialStateProperty.all(0),
+                          overlayColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Colors.grey.withOpacity(
+                                  0.3); // color when the button is pressed
+                            }
+                            return null;
+                          })),
+                      child: const Text('LoadFont'),
+                    ),
+                  ],
+                ),
                 ElevatedButton(
                   onPressed: () async {
                     final drawingAreaState =
@@ -353,8 +421,8 @@ class _DrawingSessionState extends State<DrawingSession> {
                                       color: Colors.black),
                                 ),
                                 onPressed: () {
-                                  // Navigator.of(context)
-                                  //     .pop(); // Close the dialog
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
                                 },
                               ),
                             ],
@@ -401,34 +469,6 @@ class _DrawingSessionState extends State<DrawingSession> {
                         fontSize: 16),
                   ),
                 ),
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        await combineImages();
-                      },
-                      child: const Text('Combine Images'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await concatImages();
-                      },
-                      child: const Text('Concat Images'),
-                    ),
-                    // ElevatedButton(
-                    //   onPressed: () async {
-                    //     await createfont();
-                    //   },
-                    //   child: const Text('Create Font'),
-                    //),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await loadFont();
-                      },
-                      child: const Text('Load Font'),
-                    ),
-                  ],
-                )
               ],
             )
           ],
