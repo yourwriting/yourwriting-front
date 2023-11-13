@@ -11,7 +11,6 @@ import 'package:http_parser/http_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
 
 class GeneratorScreen extends StatelessWidget {
   final String accessToken;

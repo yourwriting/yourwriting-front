@@ -7,7 +7,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>이 앱은 사용자의 사진을 업로드하기 위해 사진 라이브러리에 접근 권한이 필요합니다.</string>
 	<key>CFBundleDisplayName</key>
-	<string>Realwriting</string>
+	<string>yourwriting</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

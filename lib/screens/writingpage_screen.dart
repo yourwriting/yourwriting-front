@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:realwriting/screens/home_screen.dart';
@@ -170,11 +169,6 @@ class WritingScreenState extends State<WritingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String formattedMonth = now.month.toString().padLeft(2, '0');
-    String formattedDay = now.day.toString().padLeft(2, '0');
-    String formattedDate = "${now.year}-$formattedMonth-$formattedDay";
-
     final FocusNode focusNode = FocusNode();
     List<double> textSizeOptions = [20.0, 21.0, 22.0, 23.0, 24.0, 25.0];
 
