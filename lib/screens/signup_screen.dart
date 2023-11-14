@@ -1,43 +1,62 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:realwriting/screens/home_screen.dart';
-import 'package:realwriting/screens/signup_screen.dart';
+import 'package:realwriting/screens/login_screen.dart';
 import 'package:realwriting/style.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final _loginIdController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nicknameController = TextEditingController();
 
-  Future<String> login(String loginId, String password) async {
+  Future<void> signup(String loginId, String password, String nickname) async {
     final response = await http.post(
       Uri.parse(
-          'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/login'),
+          'http://ec2-43-200-232-144.ap-northeast-2.compute.amazonaws.com:8080/user'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
         'loginId': loginId,
         'password': password,
+        'nickname': nickname,
       }),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       // 서버에서 응답이 성공적으로 왔을 때
-      Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-      return jsonResponse['result']['accessToken'];
+      print("signup Success");
     } else {
       // 서버에서 에러 응답이 왔을 때
-      throw Exception('Failed to login.');
+      showCupertinoDialog(
+        context: context, // 필요한 context를 제공해야 합니다.
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: const Text('Error'),
+            content: const Text('회원가입에 실패했습니다. 다른 아이디로 다시 시도해주세요.'),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      throw Exception('Failed to signup. Response: ${response.body}');
     }
   }
 
@@ -62,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 178,
                   ),
                   const SizedBox(
-                    height: 72,
+                    height: 60,
                   ),
                   const Row(
                     children: [
@@ -131,65 +150,71 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   const SizedBox(
-                    height: 52,
+                    height: 36,
+                  ),
+                  const Row(
+                    children: [
+                      Text(
+                        'Nickname',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: ColorStyles.mainblack,
+                            fontSize: 18,
+                            fontFamily: "SF-Pro-Rounded-Semibold"),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  TextFormField(
+                    controller: _nicknameController,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your nickname',
+                      hintStyle: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "SF-Pro-Rounded-Regular",
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your nickname';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 60,
                   ),
                   InkWell(
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
                           try {
-                            String accessToken = await login(
+                            await signup(
                               _loginIdController.text,
                               _passwordController.text,
+                              _nicknameController.text,
                             );
-                            print('Access token: $accessToken');
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomeScreen(
-                                    accessToken: "Bearer $accessToken"),
+                                builder: (context) => const LoginScreen(),
                               ),
                             );
                           } catch (e) {
-                            print('Failed to login: $e');
+                            print('Failed to signup: $e');
                           }
                         }
                       },
                       child: const Image(
-                        image: AssetImage('assets/images/login.png'),
+                        image: AssetImage('assets/images/signup.png'),
                         width: 327,
+                        height: 50,
                       )),
                   const SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    children: [
-                      const Text(
-                        'Don’t have an account yet? Register ',
-                        style: TextStyle(
-                            fontFamily: "SF-Pro-Display-Regular",
-                            color: ColorStyles.mainblack,
-                            fontSize: 16),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignUpScreen()),
-                          );
-                        },
-                        child: const Text(
-                          'here',
-                          style: TextStyle(
-                            fontFamily: "SF-Pro-Display-Regular",
-                            color: ColorStyles.blue,
-                            fontSize: 16,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),
