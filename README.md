@@ -12,7 +12,7 @@
 <img src="https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white"><img src="https://img.shields.io/badge/flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white"><img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
 
 ### Cowork tools
-<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"><img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">\
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"><img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
 
 <br/>
 
@@ -20,12 +20,14 @@
 
 **폰트 생성 기능**
 
-- 자음과 모음 40개를 차례로 직접 기기를 이용해 그리고 이를 이용해 폰트를 생성 (핸드폰, 아이패드 모두 가능)
+- 자음과 모음 40개를 차례로 직접 기기를 이용해 그리고 이를 이용해 폰트를 생성함. (핸드폰, 아이패드 모두 가능)
 
-**노트 생성 기능**
+**노트 기능**
 
-- 
-- 
+- 노트목록은 최신 날짜부터 차례로 정렬됨.
+- + 버튼을 눌러서 노트 생성 가능.
+- 직접 만든 폰트로 작성되며 날짜와 제목도 함께 기록됨.
+- 생성된 버튼을 길게 누르면 GestureDetector의 onLongPress을 이용해 delete note 함수가 실행됨.
 
 
 <br/>
