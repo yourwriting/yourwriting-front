@@ -2,7 +2,7 @@
 'yourwriting' is note application that can generate your own font and use it on this application. 
 
 
-### Service
+### Service
 
 - 사용자의 글씨체를 바탕으로 폰트를 생성하고 이를 이용해 글을 작성할 수 있는 어플입니다.
 - 이 프로젝트의 제작 배경과 과정은 [youtube link](https://www.youtube.com/watch?v=snZSz7RWGZE&list=LL&index=5&t=24s)에서 확인할 수 있습니다.
