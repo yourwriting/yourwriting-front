@@ -32,7 +32,7 @@
 
 <br/>
 
-### 기여한 부분
+### 기여
 
 **프로젝트 기획**
 
@@ -53,4 +53,5 @@
 <br/>
 
 ### 앱 템플릿 및 사용화면
+<img width="518" alt="스크린샷 2023-12-23 오전 1 33 54" src="https://github.com/yourwriting/yourwriting-front/assets/52371699/258a0fcb-9092-48ce-8ee6-37818ef5bb81">
 
