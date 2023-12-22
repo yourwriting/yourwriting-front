@@ -27,7 +27,6 @@ class WrittenBook extends StatefulWidget {
 
 class _WrittenBookState extends State<WrittenBook> {
   late String accessToken = widget.accessToken;
-  //"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
 
   @override
   Widget build(BuildContext context) {
