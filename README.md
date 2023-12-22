@@ -1,7 +1,6 @@
 # yourwriting-frontend
 'yourwriting' is note application that can generate your own font and use it on this application. 
 
-
 ### Service
 
 - 사용자의 글씨체를 바탕으로 폰트를 생성하고 이를 이용해 글을 작성할 수 있는 어플입니다.
@@ -11,9 +10,10 @@
 
 ### Stacks
 
+
 <br/>
 
-### 핵심 기능
+### 핵심 기능
 
 **폰트 생성 기능**
 
