@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:realwriting/screens/home_screen.dart';
 import 'package:realwriting/screens/login_screen.dart';
 import 'package:realwriting/style.dart';
 import 'dart:convert';

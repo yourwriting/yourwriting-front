@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:realwriting/screens/home_screen.dart';
 import 'package:realwriting/style.dart';
 import 'dart:ui' as ui;
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/rendering.dart';
 import 'dart:io';
@@ -207,7 +205,6 @@ class _DrawingSessionState extends State<DrawingSession> {
   Future<void> concatImages() async {
     String urlString =
         'http://ec2-43-202-176-82.ap-northeast-2.compute.amazonaws.com:5000/font/concat';
-    //'http://127.0.0.1:5000/upload');
 
     Uri uri = Uri.parse(urlString);
     final response = await http.get(
@@ -228,7 +225,6 @@ class _DrawingSessionState extends State<DrawingSession> {
         'GET',
         Uri.parse(
             'http://ec2-43-202-176-82.ap-northeast-2.compute.amazonaws.com:5000/font/create'));
-    //'http://127.0.0.1:5000/create'));
 
     var response = await httpClient.send(request);
 
@@ -308,58 +304,70 @@ class _DrawingSessionState extends State<DrawingSession> {
                 }
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        await combineImages();
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          elevation: MaterialStateProperty.all(0),
-                          overlayColor:
-                              MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed)) {
-                              return Colors.grey.withOpacity(
-                                  0.3); // color when the button is pressed
-                            }
-                            return null;
-                          })),
-                      child: const Text('Combine'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await concatImages();
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          elevation: MaterialStateProperty.all(0),
-                          overlayColor:
-                              MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed)) {
-                              return Colors.grey.withOpacity(
-                                  0.3); // color when the button is pressed
-                            }
-                            return null;
-                          })),
-                      child: const Text('Concat'),
-                    ),
-                    ElevatedButton(
-                      onPressed: isLoading
-                          ? null
-                          : () async {
+            isLoading
+                ? const CircularProgressIndicator()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await combineImages();
+                              setState(() {
+                                isLoading = false;
+                              });
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                shadowColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                elevation: MaterialStateProperty.all(0),
+                                overlayColor:
+                                    MaterialStateProperty.resolveWith<Color?>(
+                                        (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.pressed)) {
+                                    return Colors.grey.withOpacity(
+                                        0.3); // color when the button is pressed
+                                  }
+                                  return null;
+                                })),
+                            child: const Text('Combine'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await concatImages();
+                              setState(() {
+                                isLoading = false;
+                              });
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                shadowColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                elevation: MaterialStateProperty.all(0),
+                                overlayColor:
+                                    MaterialStateProperty.resolveWith<Color?>(
+                                        (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.pressed)) {
+                                    return Colors.grey.withOpacity(
+                                        0.3); // color when the button is pressed
+                                  }
+                                  return null;
+                                })),
+                            child: const Text('Concat'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
                               setState(() {
                                 isLoading = true;
                               });
@@ -368,7 +376,74 @@ class _DrawingSessionState extends State<DrawingSession> {
                                 isLoading = false;
                               });
                             },
-                      style: ButtonStyle(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                shadowColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                elevation: MaterialStateProperty.all(0),
+                                overlayColor:
+                                    MaterialStateProperty.resolveWith<Color?>(
+                                        (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.pressed)) {
+                                    return Colors.grey.withOpacity(
+                                        0.3); // color when the button is pressed
+                                  }
+                                  return null;
+                                })),
+                            child: const Text('LoadFont'),
+                          ),
+                        ],
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          final drawingAreaState =
+                              _drawingAreaKey.currentState as _DrawingAreaState;
+                          await drawingAreaState.captureAndSave();
+                          if (currentStep >= 39) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CupertinoAlertDialog(
+                                  title: const Text('업로드'),
+                                  content: const Text(
+                                    '모든 글자를 전송합니다.',
+                                    style: TextStyle(
+                                        fontFamily: "Pretendard-Regular"),
+                                  ),
+                                  actions: <Widget>[
+                                    CupertinoDialogAction(
+                                      child: const Text(
+                                        'OK',
+                                        style: TextStyle(
+                                            fontFamily:
+                                                "SF-Pro-Display-Regular",
+                                            color: Colors.black),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(); // Close the dialog
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            ).then((_) async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              // After closing the dialog
+                              await uploadImages();
+                              setState(() {
+                                isLoading = false;
+                              });
+                            });
+                            //uploadImages();
+                          } else {
+                            drawingAreaState.clearDrawing();
+                          }
+                        },
+                        style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Colors.transparent),
                           shadowColor:
@@ -382,86 +457,18 @@ class _DrawingSessionState extends State<DrawingSession> {
                                   0.3); // color when the button is pressed
                             }
                             return null;
-                          })),
-                      child: const Text('LoadFont'),
-                    ),
-                  ],
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final drawingAreaState =
-                        _drawingAreaKey.currentState as _DrawingAreaState;
-                    await drawingAreaState.captureAndSave();
-                    if (currentStep >= 39) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CupertinoAlertDialog(
-                            title: const Text('업로드'),
-                            content: const Text(
-                              '모든 글자를 전송합니다.',
-                              style:
-                                  TextStyle(fontFamily: "Pretendard-Regular"),
-                            ),
-                            actions: <Widget>[
-                              CupertinoDialogAction(
-                                child: const Text(
-                                  'OK',
-                                  style: TextStyle(
-                                      fontFamily: "SF-Pro-Display-Regular",
-                                      color: Colors.black),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ).then((_) async {
-                        // After closing the dialog
-                        await uploadImages();
-                        //await combineImages();
-                        // await concatImages();
-                        // await createfont();
-                        // await loadFont();
-                        // Navigator.push(context, MaterialPageRoute<void>(
-                        //   builder: (BuildContext context) {
-                        //     return const HomeScreen(accessToken: accessToken,);
-                        //   },
-                        // )
-                        //);
-                      });
-                      //uploadImages();
-                    } else {
-                      drawingAreaState.clearDrawing();
-                    }
-                  },
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.transparent),
-                    shadowColor: MaterialStateProperty.all(Colors.transparent),
-                    elevation: MaterialStateProperty.all(0),
-                    overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return Colors.grey.withOpacity(
-                            0.3); // color when the button is pressed
-                      }
-                      return null;
-                    }),
-                  ),
-                  child: Text(
-                    currentStep >= 39 ? 'upload all' : 'next',
-                    style: const TextStyle(
-                        fontFamily: "SF-Pro-Display-Regular",
-                        color: Colors.black,
-                        fontSize: 16),
-                  ),
-                ),
-              ],
-            )
+                          }),
+                        ),
+                        child: Text(
+                          currentStep >= 39 ? 'upload all' : 'next',
+                          style: const TextStyle(
+                              fontFamily: "SF-Pro-Display-Regular",
+                              color: Colors.black,
+                              fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  )
           ],
         ));
   }
