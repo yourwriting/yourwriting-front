@@ -18,16 +18,24 @@
 
 ### 핵심 기능
 
+**로그인 기능**
+
+- 회원가입을 통해 사용자의 아이디 생성이 가능함.
+- 생성된 아이디를 통해 다른 기기에서도 자유롭게 글을 작성할 수 있음.
+  
 **폰트 생성 기능**
 
-- 자음과 모음 40개를 차례로 직접 기기를 이용해 그리고 이를 이용해 폰트를 생성함. (핸드폰, 아이패드 모두 가능)
+- 자음과 모음 40개를 차례로 직접 기기를 이용해 canvas에 그리고 이를 저장해 서버로 전송. (핸드폰, 아이패드 모두 가능)
+- 폰트서버(flask)에 40개를 모아 한번에 전송. PNG파일로 전송하며 이 때 각 파일의 제목을 01~40으로 함.
+- 폰트서버에서 폰트를 생성 후 프론트로 전송. 프론트에서 받은 폰트를 getApplicationDocumentsDirectory()를 이용해 각 모바일 기기의 sandbox에 저장해 사용함.
 
 **노트 기능**
 
-- 노트목록은 최신 날짜부터 차례로 정렬됨.
+- 노트목록은 노트서버(spring)에서 받아와 최신 날짜부터 차례로 정렬됨.
 - 플러스 버튼을 눌러서 노트 생성 가능.
 - 직접 만든 폰트로 작성되며 날짜와 제목도 함께 기록됨.
 - 생성된 버튼을 길게 누르면 GestureDetector의 onLongPress을 이용해 delete note 함수가 실행됨.
+- 글 작성시에는 글씨크기 조절, 이미지 추가 등도 가능함.
 
 
 <br/>
@@ -55,3 +63,8 @@
 ### 앱 팜플릿 및 사용화면
 <img width="518" alt="스크린샷 2023-12-23 오전 1 33 54" src="https://github.com/yourwriting/yourwriting-front/assets/52371699/258a0fcb-9092-48ce-8ee6-37818ef5bb81">
 
+![loading](https://github.com/yourwriting/yourwriting-front/assets/52371699/8b25341b-d4be-4488-8627-d62a681331d9)
+![login](https://github.com/yourwriting/yourwriting-front/assets/52371699/4b2cb253-4992-4057-9892-f2e58325a977)
+![main](https://github.com/yourwriting/yourwriting-front/assets/52371699/8f5fdd06-bda6-47b8-96db-34abed3d0cd2)
+![generator](https://github.com/yourwriting/yourwriting-front/assets/52371699/3ab2bc17-7942-4c6e-a93c-5071b6122282)
+![writingPage](https://github.com/yourwriting/yourwriting-front/assets/52371699/abad47a0-23e6-4346-add0-aa64296009f7)
