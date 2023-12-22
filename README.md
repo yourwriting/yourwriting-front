@@ -66,7 +66,7 @@
 
 <img width="518" src="https://github.com/yourwriting/yourwriting-front/assets/52371699/258a0fcb-9092-48ce-8ee6-37818ef5bb81">
 
-
+<br/>
 <br/>
 
 **사용화면**
