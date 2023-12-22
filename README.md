@@ -3,11 +3,10 @@
 
 ### Service
 
-- 사용자의 글씨체를 바탕으로 폰트를 생성하고 이를 이용해 글을 작성할 수 있는 어플입니다.
-- 이 프로젝트의 제작 배경과 과정은 [YoutubeLink](https://www.youtube.com/watch?v=snZSz7RWGZE&list=LL&index=5&t=24s)에서 확인할 수 있습니다.
+- 사용자의 글씨체를 바탕으로 폰트를 생성하고 이를 이용해 글을 작성할 수 있는 어플
+- 이 프로젝트의 제작 배경과 과정은 [YoutubeLink](https://www.youtube.com/watch?v=snZSz7RWGZE&list=LL&index=5&t=24s)
 
 <br/>
-
 ### Stacks
 <img src="https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white"><img src="https://img.shields.io/badge/flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white"><img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
 
