@@ -26,7 +26,6 @@ class WritingScreenState extends State<WritingScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   final TextEditingController _titleEditingController = TextEditingController();
   late String accessToken;
-  // "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJybGoiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5ODczNDczNSwiZXhwIjo0MjkwNzM0NzM1fQ.WpulBwf6CLFO1tFvgw9FqAxAK22-fihbf1zrFbhpph6S8lKCHqj4_zcrJGeYBPQ5Im9TjTss9_siRoeclrHNUA";
   double textSize = 20.0;
   String? imagePath;
   String? imageUrl;
