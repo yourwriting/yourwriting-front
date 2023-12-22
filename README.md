@@ -61,14 +61,18 @@
 <br/>
 
 ### 앱 팜플렛 및 사용화면
+
+**팜플렛**
+
 <img width="518" src="https://github.com/yourwriting/yourwriting-front/assets/52371699/258a0fcb-9092-48ce-8ee6-37818ef5bb81">
 
 <br/>
 
+**사용화면**
+
 <img height="406" alt="loading" src="https://github.com/yourwriting/yourwriting-front/assets/52371699/8b25341b-d4be-4488-8627-d62a681331d9">
  <img height="406" alt="login" src="https://github.com/yourwriting/yourwriting-front/assets/52371699/4b2cb253-4992-4057-9892-f2e58325a977">
 <br>
-
 <img height="406" alt="home" src="https://github.com/yourwriting/yourwriting-front/assets/52371699/8f5fdd06-bda6-47b8-96db-34abed3d0cd2">
  <img height="406" alt="generator" src="https://github.com/yourwriting/yourwriting-front/assets/52371699/3ab2bc17-7942-4c6e-a93c-5071b6122282">
  <img height="406" alt="writing" src="https://github.com/yourwriting/yourwriting-front/assets/52371699/abad47a0-23e6-4346-add0-aa64296009f7">
