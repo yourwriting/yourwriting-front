@@ -4,7 +4,7 @@
 ### Service
 
 - 사용자의 글씨체를 바탕으로 폰트를 생성하고 이를 이용해 글을 작성할 수 있는 어플
-- 이 프로젝트의 제작 배경과 과정은 [YoutubeLink](https://www.youtube.com/watch?v=snZSz7RWGZE&list=LL&index=5&t=24s)
+- 이 프로젝트의 제작 배경과 과정은 [youtubeLink](https://www.youtube.com/watch?v=snZSz7RWGZE&list=LL&index=5&t=24s)
 <br/>
 
 ### Stacks
@@ -25,7 +25,7 @@
   
 **폰트 생성 기능**
 
-- 자음과 모음 40개를 차례로 직접 기기를 이용해 canvas에 그리고 이를 저장해 서버로 전송. (핸드폰, 아이패드 모두 가능)
+- 자음과 모음 40개를 차례로 직접 기기를 이용해 canvas에 그리고 이를 저장해 서버로 전송. (핸드폰, 아이패드 가능)
 - 폰트서버(flask)에 40개를 모아 한번에 전송. PNG파일로 전송하며 이 때 각 파일의 제목을 01~40으로 함.
 - 폰트서버에서 폰트를 생성 후 프론트로 전송. 프론트에서 받은 폰트를 getApplicationDocumentsDirectory()를 이용해 각 모바일 기기의 sandbox에 저장해 사용함.
 
